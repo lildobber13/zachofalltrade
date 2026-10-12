@@ -74,6 +74,8 @@ button.b:focus-visible{outline:1px dotted #000;outline-offset:-5px}
 .sheet{margin:0 4px 4px;padding:12px;border:1px solid;border-color:#fff #000 #000 #fff;box-shadow:inset -1px -1px #808080,inset 1px 1px #dfdfdf}
 .sheet h4{margin:10px 0 2px;font-weight:normal}
 .sheet p{margin:0 0 0 14px}
+.pdfframe{flex:1;width:100%;border:1px solid;border-color:#808080 #fff #fff #808080;background:#808080;min-height:0}
+.pdfcard{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#fff;padding:16px;text-align:center}
 .tip{display:flex;gap:14px;padding:12px}
 .tipbox{flex:1;background:#fff;padding:12px;border:1px solid;border-color:#808080 #fff #fff #808080;box-shadow:inset 1px 1px #000}
 .tipbox b{display:block;margin-bottom:8px;font-size:13px}
@@ -192,8 +194,9 @@ const CONFIG = {
       description: "Description coming soon." }
   ],
 
-  // Set to the real path of your resume PDF to add Resume.pdf to My Documents (e.g. '/resume.pdf').
-  resumePdfUrl: '',
+  // Resume.pdf appears in My Documents and on the desktop. It opens in a viewer window with a Save button.
+  resumePdfUrl: '/Zach_Gilbert_Resume_2026.pdf',
+  resumeFileName: 'Zach_Gilbert_Resume_2026.pdf',
 
   // Internet shortcuts that appear in My Documents, e.g. { name: 'LinkedIn', url: 'https://...' }
   links: [],
@@ -201,35 +204,13 @@ const CONFIG = {
   // Text documents in My Documents. Edit freely.
   documents: [
     { name: 'About Me.txt', content:
-`Zach
+`Zach Gilbert
 
-AI Adoption Leader, IBM Consulting.
+AI Adoption and Enablement Leader, IBM Consulting (Americas).
 
-Background in marketing operations, CRM platform ownership, account based marketing strategy, and digital transformation.
+10+ years across marketing technology, go-to-market strategy, and digital transformation. I lead AI enablement at IBM, run hands-on training for hundreds of practitioners, and build AI platforms, agents, and dashboards that turn ambiguity into adopted, measurable outcomes.
 
-I build things on the side. Check the Applications folder on the desktop.` },
-    { name: 'Resume.txt', content:
-`ZACH
-AI Adoption Leader, IBM Consulting
-
-EXPERIENCE
-  IBM Consulting
-  Ellis Porter
-  Aysling / MagHub
-  Ingenex Digital Marketing
-  CDK Global
-
-EDUCATION
-  Ferris State University
-
-FOCUS AREAS
-  AI adoption
-  Marketing operations
-  CRM platforms (HubSpot)
-  Account based marketing
-  Digital transformation
-
-(Full details coming soon. This is a placeholder.)` }
+I also build things on the side. Check the Applications folder on the desktop, and open Resume.pdf for the full story.` }
   ]
 };
 
@@ -294,7 +275,7 @@ function buildApps(){
 function buildDocs(){
   const d = {};
   CONFIG.documents.forEach(f => { d[f.name] = { type:'text', content:f.content }; });
-  if (CONFIG.resumePdfUrl) d['Resume.pdf'] = { type:'link', url:CONFIG.resumePdfUrl, icon:'pdf' };
+  if (CONFIG.resumePdfUrl) d['Resume.pdf'] = { type:'pdf', url:CONFIG.resumePdfUrl, file:CONFIG.resumeFileName || 'Resume.pdf', icon:'pdf' };
   CONFIG.links.forEach(l => { d[l.name+'.url'] = { type:'link', url:l.url, icon:'globe' }; });
   return d;
 }
@@ -324,7 +305,7 @@ const FS = {
 function getNode(tree, path){ let n = FS[tree]; for (const p of path) n = n.children[p]; return n; }
 function nodeIcon(n){
   if (n.icon) return n.icon;
-  return ({ folder:'folder', text:'text', link:'globe', app:'app', program:'app', dialog:'folder' })[n.type] || 'text';
+  return ({ folder:'folder', text:'text', pdf:'pdf', link:'globe', app:'app', program:'app', dialog:'folder' })[n.type] || 'text';
 }
 
 /* =====================================================================
@@ -475,6 +456,7 @@ function openNode(node, name, ctx){
   switch (node.type){
     case 'folder': openExplorer(ctx.tree, [...ctx.path, name]); break;
     case 'text': openNotepad(name, node.content); break;
+    case 'pdf': openPdf(name, node); break;
     case 'link': case 'app': openUrl(node.url, node.label || name); break;
     case 'program': programs[node.run](); break;
     case 'dialog': msgBox({ title:name, text:node.msg, icon:'warn' }); break;
@@ -494,6 +476,26 @@ function openNotepad(name, text){
     { label:'Help', items:[ { label:'About Notepad', run: () => msgBox({ title:'About Notepad', icon:'info', text:'Notepad for ZachOS 95.\nIt does not save anything. Nothing here does.' }) } ] }
   ]);
   win = createWindow({ title:(name || 'Untitled')+' - Notepad', icon:'text', w:480, h:340, menu:mb, content:ta });
+  return win;
+}
+
+function openPdf(name, node){
+  const url = node.url, file = node.file || name;
+  const save = () => { const a = h('a', { href:url, download:file }); document.body.append(a); a.click(); a.remove(); };
+  const newTab = () => { window.open(url, '_blank', 'noopener'); };
+  const touchy = COARSE || innerWidth < 720;
+  const viewer = touchy
+    ? h('div', { class:'pdfcard' }, ico('pdf', 48), h('div', { class:'mtxt', text:file }),
+        h('div', { class:'brow' }, h('button', { class:'b', on:{ click:newTab } }, 'Open'), h('button', { class:'b', on:{ click:save } }, 'Save')))
+    : h('iframe', { class:'pdfframe', src:url + '#view=FitH', title:name });
+  let win;
+  const mb = menubar([
+    { label:'File', items:[ { label:'Save As...', run:save }, { label:'Open in New Tab', run:newTab }, '-', { label:'Close', run:() => closeWin(win) } ] },
+    { label:'Help', items:[ { label:'About', run: () => msgBox({ title:'About', icon:'info', text:'Document Reader for ZachOS 95.' }) } ] }
+  ]);
+  const tool = h('div', { class:'tool' }, h('button', { class:'b', on:{ click:save } }, 'Save to my computer'), h('button', { class:'b', on:{ click:newTab } }, 'Open in new tab'));
+  const content = h('div', { style:'display:flex;flex-direction:column;flex:1;min-height:0' }, tool, viewer);
+  win = createWindow({ key:'pdf:' + name, title:name + ' - Reader', icon:'pdf', w:720, h:560, menu:mb, content });
   return win;
 }
 
@@ -635,7 +637,7 @@ function openDos(){
     doom(){ print('Not enough memory to run DOOM. (Need 4 MB, have 640 KB.)'); },
     xyzzy(){ print('Nothing happens.'); },
     coffee(){ print('Error 418: I am a teapot. Brewing anyway... done.'); },
-    about(){ lines('Zach of All Trades\nAI Adoption Leader, IBM Consulting\nBuilds apps on the side. Collects retro hardware.'); }
+    about(){ lines('Zach of All Trades\nAI Adoption and Enablement Leader, IBM Consulting\nBuilds apps on the side. Collects retro hardware.'); }
   };
   cmds.ls = cmds.dir; cmds.chdir = cmds.cd; cmds.cat = cmds.type; cmds.more = cmds.type; cmds.open = cmds.start; cmds.run = cmds.start; cmds.clear = cmds.cls; cmds.rm = cmds.del; cmds.quit = cmds.exit;
   inp.addEventListener('keydown', e => {
@@ -828,6 +830,7 @@ const desktopItems = [
   { name:'My Computer', icon:'computer', open: () => openExplorer('computer', [], 'exp:c') },
   { name:'Applications', icon:'folder', open: () => openExplorer('computer', APPS_PATH, 'exp:apps') },
   { name:'My Documents', icon:'folder', open: () => openExplorer('computer', DOCS_PATH, 'exp:docs') },
+  ...(CONFIG.resumePdfUrl ? [{ name:'Resume.pdf', icon:'pdf', open: () => openPdf('Resume.pdf', { url:CONFIG.resumePdfUrl, file:CONFIG.resumeFileName }) }] : []),
   { name:'README.txt', icon:'text', open: () => openNotepad('README.txt',
 `Welcome to ZachOS 95.
 
@@ -882,6 +885,7 @@ const menuItems = [
   ] },
   { label:'Documents', icon:'folder', run: desktopItems[2].open },
   { label:'About Me', icon:'text', run: () => openNotepad('About Me.txt', (CONFIG.documents.find(d => d.name === 'About Me.txt') || { content:'' }).content) },
+  ...(CONFIG.resumePdfUrl ? [{ label:'Resume', icon:'pdf', run: () => openPdf('Resume.pdf', { url:CONFIG.resumePdfUrl, file:CONFIG.resumeFileName }) }] : []),
   { label:'Run...', icon:'app', run: openRun },
   '-',
   { label:'Shut Down...', icon:'computer', run: shutdownDialog }
