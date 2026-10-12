@@ -136,12 +136,11 @@ button.b:focus-visible{outline:0.0625rem dotted #000;outline-offset:-0.3125rem}
 .sm li.sep{padding:0;margin:0.1875rem 0.0625rem;height:0.125rem;min-height:0;background:transparent;border-top:0.0625rem solid #808080;border-bottom:0.0625rem solid #fff}
 .sm li.sep:hover{background:transparent}
 .sm .sm{display:none;position:absolute;left:100%;top:-0.1875rem;z-index:3;width:max-content;background:#c0c0c0;padding:0.125rem;border:0.0625rem solid;border-color:#fff #000 #000 #fff;box-shadow:inset 0.0625rem 0.0625rem #dfdfdf,inset -0.0625rem -0.0625rem #808080,0.125rem 0.125rem 0 rgba(0,0,0,.35)}
-.sm li:hover>.sm,.sm li.open>.sm{display:block}
+.sm li.open>.sm{display:block}
 .sm .sm.left{left:auto;right:100%}
 @media (max-width:640px){
   .sm li{flex-wrap:wrap}
   .sm .sm{width:auto;position:static;border:0;box-shadow:none;background:transparent;padding:0 0 0 1.125rem;flex-basis:100%}
-  .sm li:hover>.sm:not(.x){display:none}
   .sm li.open>.sm{display:block}
   .sm .sm li{color:#000}
 }
@@ -1062,7 +1061,7 @@ function buildMenu(items, top){
     const li = h('li', { class:(top ? 'top ' : '')+(it.sub ? 'arrow' : '') }, ico(it.icon || 'folder', top ? 32 : 16), h('span', { text:it.label }));
     if (it.sub){
       li.append(buildMenu(it.sub, false));
-      li.addEventListener('click', e => { if (e.target.closest('.sm .sm') && e.target.closest('.sm .sm') !== li.querySelector(':scope>.sm')) return; e.stopPropagation(); li.classList.toggle('open'); });
+      li.addEventListener('click', e => { if (e.target.closest('.sm .sm') && e.target.closest('.sm .sm') !== li.querySelector(':scope>.sm')) return; e.stopPropagation(); if (COARSE) li.classList.toggle('open'); else { applySub(li.parentElement, li); } fitSub(li); });
     } else {
       li.addEventListener('click', e => { e.stopPropagation(); closeStart(); it.run(); });
     }
@@ -1103,9 +1102,30 @@ function fitSub(li){
     if (r.bottom > limit && !ul.querySelector('li.arrow')){ ul.style.maxHeight = Math.max(80, limit - r.top) + 'px'; ul.style.overflowY = 'auto'; }
   }
 }
-startMenu.addEventListener('mouseover', e => { const li = e.target.closest('li'); if (li) fitSub(li); });
-startMenu.addEventListener('click', e => { const li = e.target.closest('li.arrow'); if (li) fitSub(li); });
-function closeStart(){ startMenu.classList.remove('show'); startBtn.classList.remove('on'); startMenu.querySelectorAll('li.open').forEach(l => l.classList.remove('open')); }
+function applySub(ul, want){
+  ul._want = want; clearTimeout(ul._t);
+  [...ul.children].forEach(l => l.classList.toggle('open', l === want && !!l.querySelector(':scope>.sm')));
+  if (want) fitSub(want);
+}
+function hoverSub(ul, want, delay){
+  if (ul._want === want) { clearTimeout(ul._t); return; }
+  clearTimeout(ul._t);
+  const anyOpen = [...ul.children].some(l => l.classList.contains('open'));
+  const d = delay != null ? delay : (anyOpen ? 350 : 120);
+  ul._pend = want;
+  ul._t = setTimeout(() => applySub(ul, want), d);
+}
+startMenu.addEventListener('mouseover', e => {
+  let li = e.target.closest('li'); if (!li || !startMenu.contains(li)) return;
+  const deepest = li;
+  while (li && startMenu.contains(li)){
+    const ul = li.parentElement;
+    if (li === deepest) hoverSub(ul, li.querySelector(':scope>.sm') ? li : null);
+    else { clearTimeout(ul._t); if (ul._want !== li) applySub(ul, li); }
+    li = ul.parentElement && ul.parentElement.closest('li');
+  }
+});
+function closeStart(){ startMenu.classList.remove('show'); startBtn.classList.remove('on'); startMenu.querySelectorAll('li.open').forEach(l => l.classList.remove('open')); startMenu.querySelectorAll('ul').forEach(u => { clearTimeout(u._t); u._want = null; }); }
 startBtn.addEventListener('click', e => { e.stopPropagation(); const s = startMenu.classList.toggle('show'); startBtn.classList.toggle('on', s); });
 document.addEventListener('pointerdown', e => { if (!e.target.closest('#startmenu') && !e.target.closest('#start')) closeStart(); }, true);
 document.addEventListener('keydown', e => { if (e.key === 'Escape'){ closeStart(); closeCtx(); closeMenus(); } });
