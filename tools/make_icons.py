@@ -602,7 +602,13 @@ def disky(blink=False, wave=False):
     c.rect(9, 28, 4, 2, 'K'); c.rect(19, 28, 4, 2, 'K')
     c.outline(); return c
 icons['disky'] = disky(); icons['disky_blink'] = disky(blink=True); icons['disky_wave'] = disky(wave=True)
-S16['disky'] = disky()
+def disky16():
+    c = Canvas(16)
+    c.rect(2, 1, 12, 13, 'b'); c.rect(2, 1, 12, 1, 'B'); c.rect(2, 1, 1, 13, 'B'); c.rect(13, 1, 1, 13, 'K'); c.rect(2, 13, 12, 1, 'K')
+    c.rect(5, 1, 6, 4, 'g'); c.rect(5, 1, 6, 1, 'W'); c.rect(9, 2, 1, 2, 'K')
+    c.rect(4, 7, 8, 6, 'W'); c.rect(5, 8, 1, 2, 'K'); c.rect(9, 8, 1, 2, 'K'); c.rect(6, 11, 4, 1, 'R'); c.set(5, 10, 'R'); c.set(10, 10, 'R')
+    c.outline(); return c
+S16['disky'] = disky16()
 
 pix32 = {k: v.rows() for k, v in icons.items()}
 pix16 = {k: v.rows() for k, v in S16.items()}
