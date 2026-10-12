@@ -341,6 +341,224 @@ def l16():
     return c
 S16['logo'] = l16()
 
+# ---- per-app icons -------------------------------------------------------
+def poly(c, pts, col):
+    ys = [p[1] for p in pts]
+    for y in range(min(ys), max(ys) + 1):
+        xs = []
+        for i in range(len(pts)):
+            (x0, y0), (x1, y1) = pts[i], pts[(i + 1) % len(pts)]
+            if y0 == y1: continue
+            if min(y0, y1) <= y + 0.5 < max(y0, y1):
+                xs.append(x0 + (y + 0.5 - y0) * (x1 - x0) / (y1 - y0))
+        xs.sort()
+        for i in range(0, len(xs) - 1, 2):
+            for x in range(int(round(xs[i])), int(round(xs[i + 1]))): c.set(x, y, col)
+def big(c, x, y, ch, col, k=2):
+    g = FONT[ch]
+    for j, row in enumerate(g):
+        for i, v in enumerate(row):
+            if v == 'X': c.rect(x + i * k, y + j * k, k, k, col)
+FONT['R'] = ['XX.', 'X.X', 'XX.', 'X.X', 'X.X']
+FONT['?'] = ['XX.', '..X', '.X.', '...', '.X.']
+
+A32, A16 = {}, {}
+
+def forg3d32():
+    c = Canvas()
+    poly(c, [(16,4),(27,10),(16,16),(5,10)], 'C')
+    poly(c, [(5,10),(16,16),(16,28),(5,22)], 'B')
+    poly(c, [(16,16),(27,10),(27,22),(16,28)], 'b')
+    c.line(16,16,16,28,'K'); c.line(5,10,16,16,'K'); c.line(16,16,27,10,'K')
+    c.rect(14, 9, 4, 6, 'W'); c.rect(15, 15, 2, 1, 'W')  # tiny mic body on top face
+    c.outline(); return c
+def forg3d16():
+    c = Canvas(16)
+    poly(c, [(8,2),(14,5),(8,8),(2,5)], 'C')
+    poly(c, [(2,5),(8,8),(8,14),(2,11)], 'B')
+    poly(c, [(8,8),(14,5),(14,11),(8,14)], 'b')
+    c.outline(); return c
+A32['forg3d'], A16['forg3d'] = forg3d32(), forg3d16()
+
+def ghst32():
+    c = Canvas()
+    c.disc(14, 12, 8, 'W'); c.rect(6, 12, 17, 13, 'W')
+    for x in range(6, 23):
+        c.set(x, 25 + (1 if (x // 3) % 2 == 0 else 0), 'W'); c.set(x, 26 if (x // 3) % 2 == 0 else 25, 'W')
+    c.rect(6, 12, 1, 14, 'g'); c.rect(22, 12, 1, 14, 'g')
+    c.rect(10, 10, 2, 4, 'K'); c.rect(17, 10, 2, 4, 'K'); c.rect(13, 16, 3, 2, 'K')
+    c.line(30, 3, 20, 20, 'b'); c.line(29, 3, 19, 20, 'b'); c.set(18, 21, 'K'); c.set(19, 21, 'K')
+    c.outline(); return c
+def ghst16():
+    c = Canvas(16)
+    c.disc(7, 6, 4, 'W'); c.rect(3, 6, 9, 7, 'W'); c.set(3,13,'.'); c.set(6,13,'.'); c.set(9,13,'.')
+    c.rect(5, 5, 1, 2, 'K'); c.rect(9, 5, 1, 2, 'K'); c.rect(7, 8, 2, 1, 'K')
+    c.line(15, 1, 10, 10, 'b')
+    c.outline(); return c
+A32['ghstwrtr'], A16['ghstwrtr'] = ghst32(), ghst16()
+
+def motion32():
+    c = Canvas()
+    c.rect(3, 6, 26, 20, 'K'); c.rect(4, 7, 24, 18, 'b')
+    for x in range(5, 27, 4): c.rect(x, 8, 2, 2, 'W'); c.rect(x, 22, 2, 2, 'W')
+    c.rect(5, 11, 22, 10, 'M'); c.rect(5, 11, 22, 3, 'p')
+    poly(c, [(13,13),(13,20),(20,16.5)], 'W')
+    c.outline(); return c
+def motion16():
+    c = Canvas(16)
+    c.rect(1, 3, 14, 10, 'b')
+    for x in (2, 5, 8, 11): c.set(x, 4, 'W'); c.set(x, 11, 'W')
+    c.rect(2, 5, 12, 5, 'M'); poly(c, [(6,6),(6,10),(10,8)], 'W')
+    c.outline(); return c
+A32['motiondeckstudio'], A16['motiondeckstudio'] = motion32(), motion16()
+
+def backlog32():
+    c = Canvas()
+    c.rect(1, 1, 30, 30, '.') 
+    c.disc(16, 8, 5, 'Y'); c.rect(11, 8, 11, 5, 'M')   # synthwave sun
+    for y in (10, 12): c.rect(11, y, 11, 1, 'p')
+    c.rect(3, 13, 26, 11, 'p'); c.rect(2, 15, 28, 8, 'p'); c.rect(4, 24, 6, 4, 'p'); c.rect(22, 24, 6, 4, 'p')
+    c.rect(4, 14, 24, 1, 'M')
+    c.rect(7, 17, 6, 2, 'W'); c.rect(9, 15, 2, 6, 'W')
+    c.rect(20, 16, 2, 2, 'C'); c.rect(24, 18, 2, 2, 'Y'); c.rect(22, 20, 2, 2, 'L'); c.rect(18, 19, 2, 2, 'R')
+    c.outline(); return c
+def backlog16():
+    c = Canvas(16)
+    c.disc(8, 4, 3, 'Y')
+    c.rect(1, 6, 14, 6, 'p'); c.rect(2, 12, 3, 2, 'p'); c.rect(11, 12, 3, 2, 'p'); c.rect(2, 6, 12, 1, 'M')
+    c.rect(3, 8, 4, 1, 'W'); c.rect(4, 7, 1, 3, 'W'); c.set(10, 8, 'C'); c.set(12, 9, 'Y')
+    c.outline(); return c
+A32['neverendingbacklog'], A16['neverendingbacklog'] = backlog32(), backlog16()
+
+def stud32():
+    c = Canvas()
+    for x in (6, 13, 20):
+        c.rect(x, 8, 6, 4, 'R'); c.rect(x, 8, 6, 1, 'W'); c.rect(x + 5, 9, 1, 3, 'r')
+    c.rect(3, 12, 26, 14, 'R'); c.rect(3, 12, 26, 1, 'W'); c.rect(3, 12, 1, 14, 'W')
+    c.rect(28, 12, 1, 14, 'r'); c.rect(3, 25, 26, 1, 'r'); c.rect(4, 24, 24, 1, 'r')
+    c.outline(); return c
+def stud16():
+    c = Canvas(16)
+    for x in (3, 7, 11): c.rect(x, 3, 3, 2, 'R'); c.rect(x, 3, 3, 1, 'W')
+    c.rect(1, 5, 14, 8, 'R'); c.rect(1, 5, 14, 1, 'W'); c.rect(14, 5, 1, 8, 'r'); c.rect(1, 12, 14, 1, 'r')
+    c.outline(); return c
+A32['studworkz'], A16['studworkz'] = stud32(), stud16()
+
+def nerd32():
+    c = Canvas()
+    c.rect(4, 8, 24, 20, 'p'); c.rect(4, 8, 24, 1, 'M'); c.rect(4, 8, 1, 20, 'M'); c.rect(27, 8, 1, 20, 'b'); c.rect(4, 27, 24, 1, 'b')
+    c.rect(7, 11, 18, 3, 'Y')
+    c.bevel(9, 15, 12, 12, 'W', 'W', 'G')
+    for x, y in ((11,17),(17,17),(14,20),(11,23),(17,23)): c.rect(x, y, 2, 2, 'K')
+    c.rect(22, 16, 4, 4, 'C'); c.rect(22, 16, 4, 1, 'W')
+    c.outline(); return c
+def nerd16():
+    c = Canvas(16)
+    c.rect(1, 3, 14, 11, 'p'); c.rect(1, 3, 14, 1, 'M'); c.rect(2, 5, 12, 2, 'Y')
+    c.bevel(4, 7, 7, 7, 'W', 'W', 'G'); c.set(5, 8, 'K'); c.set(9, 8, 'K'); c.set(7, 10, 'K'); c.set(5, 12, 'K'); c.set(9, 12, 'K')
+    c.outline(); return c
+A32['nerdroom'], A16['nerdroom'] = nerd32(), nerd16()
+
+def nmotg32():
+    c = Canvas()
+    c.rect(6, 3, 21, 26, 'b'); c.rect(6, 3, 21, 1, 'B'); c.rect(6, 3, 1, 26, 'B'); c.rect(26, 3, 1, 26, 'K')
+    c.rect(9, 6, 16, 20, 'W')
+    for y in (8, 12, 16): c.rect(11, y, 4, 1, 'G'); c.rect(16, y, 7, 1, 'G')
+    for y in (4, 9, 14, 19, 24): c.rect(3, y, 5, 2, 'g'); c.rect(3, y, 5, 1, 'W')
+    big(c, 13, 17, '?', 'R', 2)
+    c.outline(); return c
+def nmotg16():
+    c = Canvas(16)
+    c.rect(3, 1, 11, 14, 'b'); c.rect(5, 3, 8, 10, 'W')
+    for y in (2, 6, 10): c.rect(1, y, 3, 1, 'G')
+    c.rect(7, 5, 3, 1, 'R'); c.set(9, 6, 'R'); c.set(8, 7, 'R'); c.set(8, 9, 'R')
+    c.outline(); return c
+A32['nmotg'], A16['nmotg'] = nmotg32(), nmotg16()
+
+def pass32():
+    c = Canvas()
+    c.rect(5, 4, 22, 24, 'Y'); c.rect(5, 4, 22, 1, 'W'); c.rect(5, 4, 1, 24, 'W'); c.rect(26, 4, 1, 24, 'y'); c.rect(5, 27, 22, 1, 'y')
+    poly(c, [(21,28),(27,22),(27,28)], 'g')
+    c.rect(9, 9, 14, 2, 'R'); c.rect(9, 14, 10, 2, 'B'); c.rect(9, 19, 12, 2, 'e'); c.rect(9, 23, 6, 2, 'M')
+    c.outline(); return c
+def pass16():
+    c = Canvas(16)
+    c.rect(2, 1, 12, 13, 'Y'); c.rect(2, 1, 12, 1, 'W'); c.rect(13, 1, 1, 13, 'y'); c.rect(2, 13, 12, 1, 'y')
+    c.rect(4, 4, 8, 1, 'R'); c.rect(4, 7, 6, 1, 'B'); c.rect(4, 10, 7, 1, 'e')
+    c.outline(); return c
+A32['passinote'], A16['passinote'] = pass32(), pass16()
+
+def fate32():
+    c = Canvas()
+    for y, (x0, x1) in enumerate([(15,17),(14,18),(13,19),(12,20),(11,21),(10,22),(9,23),(9,23),(8,24),(8,24),(8,24),(9,23),(10,22),(11,21)]):
+        c.rect(x0, 5 + y, x1 - x0, 1, 'R')
+    for y, (x0, x1) in enumerate([(15,17),(14,18),(13,19),(12,20),(12,20),(11,21),(11,21),(12,20)]):
+        c.rect(x0, 11 + y, x1 - x0, 1, 'Y')
+    c.rect(14, 15, 4, 3, 'W')
+    c.rect(15, 1, 2, 14, 'g'); c.rect(15, 1, 1, 14, 'W'); c.rect(12, 14, 8, 2, 'G') ; c.rect(15, 16, 2, 8, 'y')
+    c.rect(4, 22, 24, 4, 'y'); c.rect(4, 22, 24, 1, 'Y'); c.rect(6, 26, 20, 3, 'r')
+    c.outline(); return c
+def fate16():
+    c = Canvas(16)
+    for y, (x0, x1) in enumerate([(7,9),(6,10),(5,11),(4,12),(4,12),(5,11),(6,10)]): c.rect(x0, 3 + y, x1 - x0, 1, 'R')
+    for y, (x0, x1) in enumerate([(7,9),(6,10),(6,10)]): c.rect(x0, 6 + y, x1 - x0, 1, 'Y')
+    c.rect(7, 0, 2, 8, 'g'); c.rect(5, 7, 6, 1, 'G')
+    c.rect(2, 11, 12, 2, 'y'); c.rect(3, 13, 10, 2, 'r')
+    c.outline(); return c
+A32['fatemold'], A16['fatemold'] = fate32(), fate16()
+
+def speed32():
+    c = Canvas()
+    c.bevel(2, 6, 28, 20); c.sunk(4, 8, 24, 16, 'W')
+    c.rect(15, 8, 2, 3, 'R'); c.rect(15, 21, 2, 3, 'R')
+    big(c, 14, 11, 'R', 'R', 2) if False else None
+    c.rect(13, 12, 2, 8, 'K'); c.rect(15, 12, 3, 2, 'K'); c.rect(17, 14, 2, 2, 'K'); c.rect(15, 16, 3, 2, 'K'); c.rect(17, 18, 2, 2, 'K')
+    c.rect(14, 12, 2, 8, 'R') if False else None
+    for y in (13, 16, 19): c.rect(5, y, 5 - (y % 3), 1, 'G')
+    c.rect(22, 15, 5, 1, 'G'); c.rect(22, 18, 4, 1, 'G')
+    c.outline(); return c
+def speed16():
+    c = Canvas(16)
+    c.bevel(1, 3, 14, 10); c.sunk(2, 4, 12, 8, 'W')
+    c.rect(7, 4, 1, 2, 'R'); c.rect(7, 10, 1, 2, 'R'); c.rect(6, 6, 3, 4, 'K'); c.rect(7, 7, 1, 2, 'W')
+    c.rect(3, 7, 2, 1, 'G'); c.rect(11, 8, 2, 1, 'G')
+    c.outline(); return c
+A32['speedr'], A16['speedr'] = speed32(), speed16()
+
+def line32():
+    c = Canvas()
+    c.sunk(3, 3, 26, 26, 'W')
+    pts = [(7,22),(8,12),(13,8),(19,9),(22,14),(18,18),(12,16),(11,23),(17,25),(24,22)]
+    for a, b in zip(pts, pts[1:]): c.line(a[0], a[1], b[0], b[1], 'K')
+    c.line(24, 22, 25, 8, 'K')
+    c.rect(24, 6, 4, 2, 'R')
+    c.outline(); return c
+def line16():
+    c = Canvas(16)
+    c.sunk(1, 1, 14, 14, 'W')
+    pts = [(3,11),(4,5),(8,3),(11,6),(8,9),(6,8),(6,12),(12,12)]
+    for a, b in zip(pts, pts[1:]): c.line(a[0], a[1], b[0], b[1], 'K')
+    c.outline(); return c
+A32['onlyline'], A16['onlyline'] = line32(), line16()
+
+def aian32():
+    c = Canvas()
+    nodes = [(6,7),(26,7),(5,25),(27,25)]
+    for n in nodes: c.line(n[0], n[1], 16, 16, 'G'); c.line(n[0]+1, n[1], 17, 16, 'G')
+    for x, y in nodes: c.disc(x, y, 3, 'B'); c.set(x - 1, y - 1, 'C')
+    c.disc(16, 15, 6, 'Y'); c.rect(14, 21, 5, 3, 'G'); c.rect(14, 21, 5, 1, 'g')
+    c.rect(12, 12, 2, 2, 'W'); c.rect(13, 10, 3, 1, 'W')
+    c.outline(); return c
+def aian16():
+    c = Canvas(16)
+    nodes = [(3,3),(13,3),(3,13),(13,13)]
+    for n in nodes: c.line(n[0], n[1], 8, 8, 'G')
+    for x, y in nodes: c.disc(x, y, 1, 'B')
+    c.disc(8, 7, 3, 'Y'); c.rect(7, 10, 3, 1, 'G')
+    c.outline(); return c
+A32['aiadoptionnetwork'], A16['aiadoptionnetwork'] = aian32(), aian16()
+for k in A32: icons['app_' + k] = A32[k]; S16['app_' + k] = A16[k]
+
 pix32 = {k: v.rows() for k, v in icons.items()}
 pix16 = {k: v.rows() for k, v in S16.items()}
 

@@ -2,6 +2,25 @@
 
 A single-file retro desktop portfolio. No build step, no dependencies. Open `index.html` in a browser, or host the folder anywhere that serves static files.
 
+## Current apps
+
+| Folder | Opens |
+|---|---|
+| Forg3d | https://forg3d.lovable.app |
+| ghstwrtr | https://ghstwrtr.lovable.app |
+| MotionDeck Studio | https://motiondeckstudio.lovable.app |
+| Never Ending Backlog | https://neverendingbacklog.com |
+| Studworkz | https://studworkz.lovable.app |
+| Nerdroom | https://nerdroom.lovable.app |
+| No Memory Of This Game | https://nmotg.lovable.app |
+| Passinote | https://passinote.com |
+| Fatemold | https://fatemold.lovable.app |
+| Speedr | https://speedr.lovable.app |
+| Onlyline | https://onlyline.lovable.app |
+| AI Adoption Network | https://aiadoptionnetwork.com |
+
+Descriptions live in `CONFIG.apps` and appear in each app folder as `README.txt`. Each app has its own pixel icon (`app_<id>` in `tools/make_icons.py`).
+
 ## Adding an app
 Edit the `CONFIG.apps` array near the top of the script in `index.html`:
 
@@ -9,7 +28,7 @@ Edit the `CONFIG.apps` array near the top of the script in `index.html`:
 { id: 'onlyline', name: 'Onlyline', url: '/apps/onlyline', description: 'What it does.' }
 ```
 
-Each app appears as a folder in Applications (and in Start > Programs > Applications). Opening the folder shows `Launch <name>.exe`; double-clicking it opens `url` in a new tab. You can type the `id` in the DOS prompt or Start > Run too.
+Each app appears as a folder in Applications (and in Start > Programs > Applications). Opening the folder shows `README.txt` and `Launch <name>.exe`; double-clicking it opens `url` in a new tab. You can type the `id` in the DOS prompt or Start > Run too.
 
 ## Documents
 `CONFIG.documents` holds the text files in My Documents. Set `CONFIG.resumePdfUrl` (for example `/resume.pdf`) to add a real Resume.pdf, and use `CONFIG.links` for LinkedIn, GitHub and similar shortcuts. The About Me and Resume text shipped here is placeholder copy built from a few basics. Edit it.
