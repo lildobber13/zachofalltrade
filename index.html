@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Zach of All Trades</title>
+<meta name="description" content="Portfolio of Zach of All Trades, presented as a retro desktop. Apps, resume, and a few secrets.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23008080'/%3E%3Crect x='2' y='2' width='12' height='9' fill='%23c0c0c0'/%3E%3Crect x='3' y='3' width='10' height='7' fill='%23000080'/%3E%3Crect x='5' y='12' width='6' height='2' fill='%23c0c0c0'/%3E%3C/svg%3E">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#008080;font:12px Tahoma,"MS Sans Serif",Geneva,Verdana,Arial,sans-serif;color:#000;-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.ic{display:inline-flex;flex:none;line-height:0}
+.ic svg{display:block}
+.raised{background:#c0c0c0;border:1px solid;border-color:#dfdfdf #000 #000 #dfdfdf;box-shadow:inset 1px 1px #fff,inset -1px -1px #808080}
+.sunken{border:1px solid;border-color:#808080 #fff #fff #808080;box-shadow:inset 1px 1px #000,inset -1px -1px #dfdfdf}
+button.b{font:inherit;color:#000;background:#c0c0c0;border:1px solid;border-color:#dfdfdf #000 #000 #dfdfdf;box-shadow:inset 1px 1px #fff,inset -1px -1px #808080;padding:4px 14px;min-width:75px;cursor:default}
+button.b:active{border-color:#000 #dfdfdf #dfdfdf #000;box-shadow:inset 1px 1px #808080,inset -1px -1px #fff;padding:5px 13px 3px 15px}
+button.b:focus-visible{outline:1px dotted #000;outline-offset:-5px}
+
+/* desktop */
+#desktop{position:fixed;left:0;top:0;right:0;bottom:28px;overflow:hidden;background:#008080}
+#icons{position:absolute;inset:0;padding:6px;display:grid;grid-auto-flow:column;grid-template-rows:repeat(auto-fill,88px);grid-auto-columns:88px;align-content:start;justify-content:start}
+.dicon{width:84px;height:84px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:4px 2px;color:#fff;text-align:center;outline:none}
+.dicon .lbl{padding:1px 3px;line-height:1.15;word-break:break-word}
+.dicon.sel .lbl,.dicon:focus-visible .lbl{background:#000080;outline:1px dotted #ff0}
+.dicon.sel .ic{opacity:.7}
+
+/* windows */
+.win{position:absolute;display:flex;flex-direction:column;background:#c0c0c0;border:1px solid;border-color:#dfdfdf #000 #000 #dfdfdf;box-shadow:inset 1px 1px #fff,inset -1px -1px #808080,2px 2px 0 rgba(0,0,0,.35);padding:2px;max-width:100vw}
+.win.max{left:0!important;top:0!important;width:100%!important;height:100%!important;box-shadow:none}
+.win.max .grip{display:none}
+.titlebar{display:flex;align-items:center;gap:4px;height:20px;padding:2px 2px 2px 3px;color:#fff;font-weight:bold;background:linear-gradient(90deg,#000080,#1084d0);touch-action:none;flex:none}
+.win.inactive .titlebar{background:linear-gradient(90deg,#808080,#b5b5b5);color:#c0c0c0}
+.titlebar .t{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tbtn{width:16px;height:14px;padding:0;margin-left:1px;font:bold 11px/8px Arial,sans-serif;color:#000;background:#c0c0c0;border:1px solid;border-color:#dfdfdf #000 #000 #dfdfdf;box-shadow:inset 1px 1px #fff,inset -1px -1px #808080;cursor:default;flex:none}
+.tbtn:active{border-color:#000 #dfdfdf #dfdfdf #000;box-shadow:inset 1px 1px #808080}
+.body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.grip{position:absolute;right:0;bottom:0;width:14px;height:14px;cursor:nwse-resize;touch-action:none;background:linear-gradient(135deg,transparent 55%,#808080 55% 62%,transparent 62% 72%,#808080 72% 79%,transparent 79%)}
+
+/* menus */
+.menubar{display:flex;padding:1px 0 2px;flex:none}
+.mi{position:relative;padding:2px 8px}
+.mi.open{background:#000080;color:#fff}
+.dd{display:none;position:absolute;left:0;top:100%;min-width:140px;z-index:50;padding:2px;color:#000;background:#c0c0c0;border:1px solid;border-color:#dfdfdf #000 #000 #dfdfdf;box-shadow:inset 1px 1px #fff,inset -1px -1px #808080,2px 2px 0 rgba(0,0,0,.35)}
+.mi.open .dd{display:block}
+.ddi{padding:4px 22px 4px 18px;white-space:nowrap;color:#000;background:#c0c0c0}
+.ddi:hover{background:#000080;color:#fff}
+.sep{height:2px;border-top:1px solid #808080;border-bottom:1px solid #fff;margin:3px 1px}
+
+/* explorer */
+.tool{display:flex;gap:4px;padding:3px;align-items:center;flex:none}
+.tool button.b{min-width:0;padding:3px 10px}
+.addr{flex:1;min-width:0;background:#fff;padding:2px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list{flex:1;background:#fff;overflow:auto;padding:4px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:2px}
+.item{width:92px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 2px;text-align:center;color:#000;outline:none}
+.item .lbl{padding:1px 3px;line-height:1.15;word-break:break-word}
+.item.sel .lbl,.item:focus-visible .lbl{background:#000080;color:#fff;outline:1px dotted #ff0}
+.status{padding:2px 6px;flex:none;margin-top:2px}
+
+/* notepad / dos */
+.pad{flex:1;resize:none;border:0;outline:0;margin:0;padding:4px;background:#fff;color:#000;font:13px/1.3 "Courier New",monospace;-webkit-user-select:text;user-select:text;overflow:auto;white-space:pre-wrap}
+.dos{flex:1;background:#000;color:#c0c0c0;font:14px/1.25 "Courier New",monospace;padding:4px;overflow:auto;white-space:pre-wrap;word-break:break-all;-webkit-user-select:text;user-select:text;cursor:text}
+.dos input{background:transparent;border:0;outline:0;color:inherit;font:inherit;width:60%;padding:0;caret-color:#c0c0c0;-webkit-user-select:text;user-select:text}
+
+/* dialogs */
+.msg{padding:12px;min-width:250px;max-width:400px}
+.mrow{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+.mtxt{white-space:pre-wrap;padding-top:4px;word-break:break-word}
+.brow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.radio{display:flex;align-items:center;gap:6px;margin:6px 0}
+.field{width:100%;font:inherit;padding:3px 4px;background:#fff;border:1px solid;border-color:#808080 #fff #fff #808080;box-shadow:inset 1px 1px #000;outline:0;-webkit-user-select:text;user-select:text}
+.tabs{display:flex;padding:0 4px;flex:none}
+.tab{padding:3px 10px;border:1px solid;border-color:#fff #000 transparent #fff;background:#c0c0c0;margin-bottom:-1px;position:relative}
+.sheet{margin:0 4px 4px;padding:12px;border:1px solid;border-color:#fff #000 #000 #fff;box-shadow:inset -1px -1px #808080,inset 1px 1px #dfdfdf}
+.sheet h4{margin:10px 0 2px;font-weight:normal}
+.sheet p{margin:0 0 0 14px}
+.tip{display:flex;gap:14px;padding:12px}
+.tipbox{flex:1;background:#fff;padding:12px;border:1px solid;border-color:#808080 #fff #fff #808080;box-shadow:inset 1px 1px #000}
+.tipbox b{display:block;margin-bottom:8px;font-size:13px}
+
+/* minesweeper */
+.mine{padding:6px;display:flex;flex-direction:column;gap:6px;background:#c0c0c0}
+.mtop{display:flex;justify-content:space-between;align-items:center;padding:4px 5px}
+.led{font:bold 20px/22px "Courier New",monospace;color:#f00;background:#000;padding:0 3px;min-width:44px;text-align:center;letter-spacing:1px}
+.face{width:28px;height:28px;padding:0;font:bold 13px Arial;background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;color:#000}
+.face:active{border-color:#808080 #fff #fff #808080}
+.mgrid{display:grid;width:max-content}
+.cell{width:20px;height:20px;padding:0;font:bold 13px/18px Arial;text-align:center;background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;cursor:default;color:#000}
+.cell.r{border:1px solid #808080;border-width:1px 0 0 1px;line-height:18px}
+.cell.boom{background:#f00}
+.cell.f{color:#d00}
+.n1{color:#0000ff}.n2{color:#008000}.n3{color:#ff0000}.n4{color:#000080}.n5{color:#800000}.n6{color:#008080}.n7{color:#000}.n8{color:#808080}
+
+/* taskbar and start */
+#taskbar{position:fixed;left:0;right:0;bottom:0;height:28px;display:flex;align-items:center;gap:3px;padding:2px;background:#c0c0c0;border-top:1px solid #dfdfdf;box-shadow:inset 0 1px #fff;z-index:100000}
+#start{display:flex;align-items:center;gap:5px;font-weight:bold;padding:0 7px;height:22px;min-width:0;flex:none}
+#start.on{border-color:#000 #dfdfdf #dfdfdf #000;box-shadow:inset 1px 1px #808080,inset -1px -1px #fff}
+#tasks{flex:1;display:flex;gap:3px;overflow:hidden;min-width:0}
+.task{flex:0 1 160px;min-width:36px;height:22px;display:flex;align-items:center;gap:5px;padding:0 6px;overflow:hidden;white-space:nowrap;text-align:left;font:inherit;color:#000;background:#c0c0c0;border:1px solid;border-color:#dfdfdf #000 #000 #dfdfdf;box-shadow:inset 1px 1px #fff,inset -1px -1px #808080;cursor:default}
+.task .tl{overflow:hidden;text-overflow:ellipsis}
+.task.active{font-weight:bold;border-color:#000 #dfdfdf #dfdfdf #000;box-shadow:inset 1px 1px #808080,inset -1px -1px #fff;background:repeating-conic-gradient(#c0c0c0 0 25%,#fff 0 50%) 0 0/2px 2px}
+#tray{height:22px;display:flex;align-items:center;padding:0 10px;flex:none}
+#startmenu{display:none;position:fixed;left:2px;bottom:28px;z-index:100001;padding:2px;background:#c0c0c0;border:1px solid;border-color:#dfdfdf #000 #000 #dfdfdf;box-shadow:inset 1px 1px #fff,inset -1px -1px #808080}
+#startmenu.show{display:flex}
+.sbanner{width:26px;flex:none;background:linear-gradient(0deg,#000080,#1084d0);color:#fff;font:bold 19px Arial,sans-serif;writing-mode:vertical-rl;transform:rotate(180deg);padding:8px 3px;white-space:nowrap;letter-spacing:1px}
+.sm{list-style:none;margin:0;padding:0;min-width:176px}
+.sm li{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:5px 14px 5px 6px;white-space:nowrap;color:#000;background:#c0c0c0}
+.sm li.top{font-size:13px;padding:8px 22px 8px 6px}
+.sm li:hover,.sm li.open{background:#000080;color:#fff}
+.sm li.arrow::after{content:'\25B6';margin-left:auto;font-size:8px;padding-left:14px}
+.sm li.sep{padding:0;margin:3px 1px;height:2px;min-height:0;background:transparent;border-top:1px solid #808080;border-bottom:1px solid #fff}
+.sm li.sep:hover{background:transparent}
+.sm .sm{display:none;position:absolute;left:100%;top:-3px;z-index:3;background:#c0c0c0;padding:2px;border:1px solid;border-color:#dfdfdf #000 #000 #dfdfdf;box-shadow:inset 1px 1px #fff,inset -1px -1px #808080,2px 2px 0 rgba(0,0,0,.35)}
+.sm li:hover>.sm,.sm li.open>.sm{display:block}
+@media (max-width:640px){
+  .sm .sm{position:static;border:0;box-shadow:none;background:transparent;padding:0 0 0 18px;flex-basis:100%}
+  .sm li:hover>.sm:not(.x){display:none}
+  .sm li.open>.sm{display:block}
+  .sm .sm li{color:#000}
+}
+.ctx{position:fixed;z-index:100002;padding:2px;background:#c0c0c0;border:1px solid;border-color:#dfdfdf #000 #000 #dfdfdf;box-shadow:inset 1px 1px #fff,inset -1px -1px #808080,2px 2px 0 rgba(0,0,0,.35)}
+.balloon{position:fixed;right:8px;bottom:36px;max-width:270px;background:#ffffe1;border:1px solid #000;padding:8px 24px 8px 10px;z-index:100001;box-shadow:2px 2px 0 rgba(0,0,0,.3);line-height:1.3}
+.balloon a{color:#0000ee}
+.balloon .x{position:absolute;right:4px;top:2px;cursor:default;font-weight:bold}
+
+/* overlays */
+#boot{position:fixed;inset:0;background:#000;color:#c0c0c0;font:16px/1.35 "Courier New",monospace;z-index:300000;padding:16px;display:none;overflow:hidden;white-space:pre-wrap}
+.splash{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(#0a2a8a,#2a8ad0 70%,#7fd0e8);color:#fff;text-align:center}
+.splash h1{font:italic bold 52px Arial,sans-serif;text-shadow:3px 3px #000;margin:0}
+.splash p{margin:8px 0 0;font:15px Arial,sans-serif;text-shadow:1px 1px #000}
+.pbar{width:240px;height:16px;border:2px solid #fff;overflow:hidden;margin-top:34px;background:rgba(0,0,0,.35)}
+.pbar i{display:block;width:70px;height:100%;background:repeating-linear-gradient(90deg,#00f 0 8px,transparent 8px 10px);animation:slide 1.2s linear infinite}
+@keyframes slide{from{transform:translateX(-70px)}to{transform:translateX(240px)}}
+#bsod{position:fixed;inset:0;background:#0000aa;color:#fff;font:16px/1.3 "Courier New",monospace;z-index:200000;padding:6vh 6vw;white-space:pre-wrap;overflow:auto}
+#bsod b{background:#aaa;color:#0000aa;padding:0 8px}
+#off{position:fixed;inset:0;z-index:250000;background:#000;color:#ff8c00;display:flex;align-items:center;justify-content:center;text-align:center;font:22px/1.4 "Courier New",monospace;padding:20px}
+#off.blue{background:linear-gradient(#0a2a8a,#2a8ad0);color:#fff;font:22px Arial,sans-serif}
+#saver{position:fixed;inset:0;z-index:190000;background:#000;cursor:none}
+noscript .ns{position:fixed;inset:0;background:#c0c0c0;padding:24px;z-index:400000;overflow:auto;-webkit-user-select:text;user-select:text}
+</style>
+</head>
+<body>
+<div id="desktop"><div id="icons"></div></div>
+<div id="taskbar">
+  <button id="start" class="b" aria-label="Start menu"></button>
+  <div id="tasks"></div>
+  <div id="tray" class="sunken"><span id="clock"></span></div>
+</div>
+<div id="startmenu"></div>
+<div id="boot"></div>
+<noscript><div class="ns"><h1>Zach of All Trades</h1><p>This site is a retro desktop and needs JavaScript. Please enable it to explore the apps and documents.</p></div></noscript>
+
+<script>
+(function(){
+'use strict';
+
+/* =====================================================================
+   CONFIG: edit this block to add apps, documents and links.
+   ===================================================================== */
+const CONFIG = {
+  ownerName: 'Zach',
+  siteName: 'Zach of All Trades',
+
+  // Each app becomes a folder inside Applications, with a Launch .exe inside it.
+  // Double-clicking the .exe opens `url` in a new tab.
+  apps: [
+    { id: 'neverendingbacklog', name: 'NeverEndingBacklog', url: '/apps/neverendingbacklog',
+      description: 'Description coming soon.' }
+    // { id: 'onlyline', name: 'Onlyline', url: '/apps/onlyline', description: 'Turns a photo into an animated one line portrait.' },
+  ],
+
+  // Set to the real path of your resume PDF to add Resume.pdf to My Documents (e.g. '/resume.pdf').
+  resumePdfUrl: '',
+
+  // Internet shortcuts that appear in My Documents, e.g. { name: 'LinkedIn', url: 'https://...' }
+  links: [],
+
+  // Text documents in My Documents. Edit freely.
+  documents: [
+    { name: 'About Me.txt', content:
+`Zach
+
+AI Adoption Leader, IBM Consulting.
+
+Background in marketing operations, CRM platform ownership, account based marketing strategy, and digital transformation.
+
+I build things on the side. Check the Applications folder on the desktop.` },
+    { name: 'Resume.txt', content:
+`ZACH
+AI Adoption Leader, IBM Consulting
+
+EXPERIENCE
+  IBM Consulting
+  Ellis Porter
+  Aysling / MagHub
+  Ingenex Digital Marketing
+  CDK Global
+
+EDUCATION
+  Ferris State University
+
+FOCUS AREAS
+  AI adoption
+  Marketing operations
+  CRM platforms (HubSpot)
+  Account based marketing
+  Digital transformation
+
+(Full details coming soon. This is a placeholder.)` }
+  ]
+};
+
+/* =====================================================================
+   helpers and icons
+   ===================================================================== */
+const $ = (s, r) => (r || document).querySelector(s);
+function h(tag, props, ...kids){
+  const e = document.createElement(tag);
+  if (props) for (const k in props){
+    const v = props[k];
+    if (k === 'class') e.className = v;
+    else if (k === 'html') e.innerHTML = v;
+    else if (k === 'text') e.textContent = v;
+    else if (k === 'style') e.style.cssText = v;
+    else if (k === 'on'){ for (const ev in v) e.addEventListener(ev, v[ev]); }
+    else e.setAttribute(k, v);
+  }
+  for (const c of kids.flat()) if (c != null) e.append(c.nodeType ? c : document.createTextNode(c));
+  return e;
+}
+const COARSE = matchMedia('(pointer:coarse)').matches;
+
+const ICONS = {
+  folder:'<path d="M2.5 7.5h10l2 3h15v16h-27z" fill="#e8c840" stroke="#000"/><path d="M3.5 12.5h25" stroke="#fff6a0"/>',
+  computer:'<rect x="5.5" y="4.5" width="21" height="16" fill="#c0c0c0" stroke="#000"/><rect x="8.5" y="7.5" width="15" height="10" fill="#008080" stroke="#000"/><rect x="10.5" y="22.5" width="11" height="3" fill="#c0c0c0" stroke="#000"/><rect x="6.5" y="26.5" width="19" height="2" fill="#c0c0c0" stroke="#000"/>',
+  bin:'<path d="M8.5 9.5l2 18h11l2-18z" fill="#c0c0c0" stroke="#000"/><rect x="6.5" y="6.5" width="19" height="3" fill="#dfdfdf" stroke="#000"/><path d="M12 4.5h8" stroke="#000"/><path d="M13.5 12v13M16.5 12v13M19.5 12v13" stroke="#808080"/>',
+  text:'<path d="M7.5 3.5h13l5 5v20h-18z" fill="#fff" stroke="#000"/><path d="M20.5 3.5v5h5" fill="#c0c0c0" stroke="#000"/><path d="M10 12.5h12M10 15.5h12M10 18.5h12M10 21.5h8" stroke="#000080"/>',
+  pdf:'<path d="M7.5 3.5h13l5 5v20h-18z" fill="#fff" stroke="#000"/><path d="M20.5 3.5v5h5" fill="#c0c0c0" stroke="#000"/><rect x="9" y="17" width="15" height="8" fill="#c00000"/><text x="16.5" y="23.5" font-size="6.5" font-family="Arial" font-weight="bold" fill="#fff" text-anchor="middle">PDF</text>',
+  app:'<rect x="3.5" y="5.5" width="25" height="21" fill="#c0c0c0" stroke="#000"/><rect x="5" y="7" width="22" height="4" fill="#000080"/><rect x="5.5" y="12.5" width="21" height="13" fill="#fff" stroke="#808080"/><path d="M10 16.5l3 3-3 3M15 23h6" stroke="#000080" fill="none"/>',
+  dos:'<rect x="3.5" y="5.5" width="25" height="21" fill="#000" stroke="#808080"/><rect x="4" y="6" width="24" height="3" fill="#c0c0c0"/><text x="6.5" y="21" font-size="8.5" font-family="Courier New,monospace" fill="#c0c0c0">C:\\_</text>',
+  mine:'<circle cx="16" cy="16" r="7" fill="#000"/><path d="M16 5v22M5 16h22M8 8l16 16M24 8L8 24" stroke="#000" stroke-width="2"/><rect x="12.5" y="12.5" width="3" height="3" fill="#fff"/>',
+  globe:'<circle cx="16" cy="16" r="11" fill="#2060d0" stroke="#000"/><path d="M9 11c3-3 6 0 5 3s-4 2-3 6-3 1-4-3 0-4 2-6zM19 8c3 0 6 3 5 7-2-1-4 0-5-2s-2-3 0-5z" fill="#30a030"/>',
+  floppy:'<path d="M5.5 5.5h19l2 2v19h-21z" fill="#303030" stroke="#000"/><rect x="10" y="5.5" width="11" height="8" fill="#c0c0c0"/><rect x="9" y="18" width="14" height="9" fill="#dfdfdf"/>',
+  cd:'<circle cx="16" cy="16" r="11" fill="#d8d8e8" stroke="#000"/><circle cx="16" cy="16" r="3" fill="#008080" stroke="#000"/>',
+  drive:'<rect x="3.5" y="11.5" width="25" height="10" fill="#c0c0c0" stroke="#000"/><rect x="6" y="16" width="12" height="2" fill="#000"/><circle cx="24" cy="17" r="1.3" fill="#0a0"/>',
+  warn:'<path d="M16 3L30 28H2z" fill="#ffff00" stroke="#000"/><rect x="15" y="11" width="2" height="9"/><rect x="15" y="22" width="2" height="3"/>',
+  info:'<circle cx="16" cy="16" r="13" fill="#0000c0" stroke="#fff"/><rect x="14.5" y="14" width="3" height="9" fill="#fff"/><rect x="14.5" y="8" width="3" height="3" fill="#fff"/>',
+  error:'<circle cx="16" cy="16" r="13" fill="#c00000" stroke="#fff"/><path d="M10 10l12 12M22 10L10 22" stroke="#fff" stroke-width="3"/>',
+  bulb:'<circle cx="16" cy="13" r="8" fill="#ffee55" stroke="#000"/><rect x="12.5" y="21.5" width="7" height="5" fill="#c0c0c0" stroke="#000"/><path d="M13 14l3 3 3-3" stroke="#a80" fill="none"/>',
+  logo:'<path d="M2 3c3-1.2 5 1.2 8 0v6c-3 1.2-5-1.2-8 0z" fill="#e02020"/><path d="M11 3c3 1.2 4-1.2 7 0v6c-3-1.2-4 1.2-7 0z" fill="#20a020"/><path d="M2 10c3-1.2 5 1.2 8 0v6c-3 1.2-5-1.2-8 0z" fill="#2040e0"/><path d="M11 10c3 1.2 4-1.2 7 0v6c-3-1.2-4 1.2-7 0z" fill="#e8d020"/>'
+};
+function svg(name, px){
+  const vb = name === 'logo' ? '0 0 20 19' : '0 0 32 32';
+  return '<svg width="'+px+'" height="'+px+'" viewBox="'+vb+'" shape-rendering="crispEdges" aria-hidden="true">'+(ICONS[name]||ICONS.app)+'</svg>';
+}
+const ico = (name, px) => h('span', { class:'ic', html: svg(name, px || 16) });
+
+/* =====================================================================
+   virtual file system
+   ===================================================================== */
+function buildApps(){
+  const kids = {};
+  CONFIG.apps.forEach(a => {
+    kids[a.name] = { type:'folder', children:{
+      ['Launch '+a.name+'.exe']: { type:'app', url:a.url, icon:a.icon || 'app', label:a.name },
+      'About.txt': { type:'text', content: a.name+'\n\n'+(a.description || 'Description coming soon.')+'\n\nAddress: '+a.url }
+    }};
+  });
+  return kids;
+}
+function buildDocs(){
+  const d = {};
+  CONFIG.documents.forEach(f => { d[f.name] = { type:'text', content:f.content }; });
+  if (CONFIG.resumePdfUrl) d['Resume.pdf'] = { type:'link', url:CONFIG.resumePdfUrl, icon:'pdf' };
+  CONFIG.links.forEach(l => { d[l.name+'.url'] = { type:'link', url:l.url, icon:'globe' }; });
+  return d;
+}
+const FS = {
+  computer: { type:'folder', children:{
+    'Zach (C:)': { type:'folder', icon:'drive', children:{
+      'Applications': { type:'folder', children: buildApps() },
+      'My Documents': { type:'folder', children: buildDocs() },
+      'Games': { type:'folder', children:{ 'Minesweeper': { type:'program', run:'minesweeper', icon:'mine' } } },
+      'Windows': { type:'folder', children:{
+        'System32': { type:'folder', children:{
+          'README_DO_NOT_DELETE.txt': { type:'text', content:'Deleting System32 does nothing here.\nPlease do not try it on a real computer.' },
+          'config.sys': { type:'text', content:'DEVICE=C:\\WINDOWS\\HIMEM.SYS\nDOS=HIGH,UMB\nREM Zach was here.' }
+        }},
+        'autoexec.bat': { type:'text', content:'@ECHO OFF\nPROMPT $p$g\nECHO Welcome back.\nREM TODO: finish all the apps' }
+      }}
+    }},
+    '3\u00BD Floppy (A:)': { type:'dialog', icon:'floppy', msg:'A:\\ is not accessible.\n\nThe device is not ready.' },
+    'CD-ROM (D:)': { type:'dialog', icon:'cd', msg:'D:\\ is not accessible.\n\nPlease insert a disc. Preferably one with a cool demo on it.' }
+  }},
+  bin: { type:'folder', children:{
+    'old_portfolio_v1.html': { type:'text', content:'<h1>Welcome to my homepage!</h1>\n<marquee>UNDER CONSTRUCTION</marquee>\n<p>You are visitor number 000042.</p>' },
+    'ideas_that_seemed_good_at_2am.txt': { type:'text', content:'1. An app for finding other apps\n2. Alarm clock that argues back\n3. A backlog that never ends (this one stayed)' },
+    'TODO.txt': { type:'text', content:'1. Finish all the apps\n2. See 1' }
+  }}
+};
+function getNode(tree, path){ let n = FS[tree]; for (const p of path) n = n.children[p]; return n; }
+function nodeIcon(n){
+  if (n.icon) return n.icon;
+  return ({ folder:'folder', text:'text', link:'globe', app:'app', program:'app', dialog:'folder' })[n.type] || 'text';
+}
+
+/* =====================================================================
+   window manager
+   ===================================================================== */
+const desk = $('#desktop'), tasks = $('#tasks');
+let z = 100, cascade = 0, activeWin = null;
+const wins = new Set(), keyed = new Map();
+
+function refresh(){
+  wins.forEach(w => {
+    const a = w === activeWin && !w.min;
+    w.root.classList.toggle('inactive', !a);
+    if (w.btn) w.btn.classList.toggle('active', a);
+  });
+}
+function focusWin(w){
+  if (w.min){ w.min = false; w.root.style.display = 'flex'; }
+  w.root.style.zIndex = ++z; activeWin = w; refresh();
+}
+function focusTop(){
+  const vis = [...wins].filter(w => !w.min).sort((a,b) => Number(b.root.style.zIndex) - Number(a.root.style.zIndex))[0];
+  if (vis) focusWin(vis); else { activeWin = null; refresh(); }
+}
+function minWin(w){ w.min = true; w.root.style.display = 'none'; if (activeWin === w) focusTop(); else refresh(); }
+function toggleMax(w){
+  w.max = !w.max; w.root.classList.toggle('max', w.max);
+  if (w.maxBtn) w.maxBtn.textContent = w.max ? '\u2750' : '\u25A1';
+}
+function closeWin(w){
+  if (w.opts.onClose) w.opts.onClose();
+  w.root.remove(); if (w.btn) w.btn.remove(); wins.delete(w);
+  if (w.opts.key) keyed.delete(w.opts.key);
+  if (activeWin === w){ activeWin = null; focusTop(); } else refresh();
+}
+function drag(handle, e, onMove){
+  const sx = e.clientX, sy = e.clientY;
+  handle.setPointerCapture(e.pointerId);
+  const mv = ev => onMove(ev.clientX - sx, ev.clientY - sy);
+  const up = () => { handle.removeEventListener('pointermove', mv); handle.removeEventListener('pointerup', up); handle.removeEventListener('pointercancel', up); };
+  handle.addEventListener('pointermove', mv); handle.addEventListener('pointerup', up); handle.addEventListener('pointercancel', up);
+}
+function createWindow(o){
+  if (o.key && keyed.has(o.key)){ const ex = keyed.get(o.key); focusWin(ex); return ex; }
+  const resizable = o.resizable !== false, minimizable = o.minimizable !== false;
+  const maximizable = o.maximizable !== undefined ? o.maximizable : resizable;
+  const dw = innerWidth, dh = innerHeight - 28;
+  const w = { min:false, max:false, opts:o };
+  const root = h('div', { class:'win', style:'width:'+Math.min(o.w || 420, dw - 4)+'px;'+(o.h ? 'height:'+Math.min(o.h, dh - 4)+'px;' : '') });
+  const titleEl = h('span', { class:'t' }, o.title);
+  const tb = h('div', { class:'titlebar' }, o.icon === null ? null : ico(o.icon || 'app', 16), titleEl);
+  const mk = (txt, title, fn) => h('button', { class:'tbtn', title, 'aria-label':title, on:{ click: e => { e.stopPropagation(); fn(); } } }, txt);
+  if (minimizable) tb.append(mk('_', 'Minimize', () => minWin(w)));
+  if (maximizable){ w.maxBtn = mk('\u25A1', 'Maximize', () => toggleMax(w)); tb.append(w.maxBtn); }
+  tb.append(mk('\u00D7', 'Close', () => closeWin(w)));
+  const body = h('div', { class:'body' }, o.content);
+  root.append(tb); if (o.menu) root.append(o.menu); root.append(body);
+  if (resizable){
+    const g = h('div', { class:'grip' });
+    g.addEventListener('pointerdown', e => {
+      e.stopPropagation(); focusWin(w);
+      const ow = root.offsetWidth, oh = root.offsetHeight;
+      drag(g, e, (dx, dy) => { root.style.width = Math.max(240, ow + dx)+'px'; root.style.height = Math.max(140, oh + dy)+'px'; });
+    });
+    root.append(g);
+  }
+  root.addEventListener('pointerdown', () => focusWin(w), true);
+  tb.addEventListener('pointerdown', e => {
+    if (e.target.closest('.tbtn') || w.max) return;
+    const ox = root.offsetLeft, oy = root.offsetTop;
+    drag(tb, e, (dx, dy) => {
+      root.style.left = Math.max(60 - root.offsetWidth, Math.min(innerWidth - 60, ox + dx))+'px';
+      root.style.top = Math.max(0, Math.min(dh - 20, oy + dy))+'px';
+    });
+  });
+  if (maximizable) tb.addEventListener('dblclick', e => { if (!e.target.closest('.tbtn')) toggleMax(w); });
+  desk.append(root);
+  const baseX = dw >= 900 ? 120 : 24;
+  let x = baseX + (cascade % 8) * 26, y = 16 + (cascade % 8) * 26; cascade++;
+  if (o.center){ x = (dw - root.offsetWidth) / 2; y = (dh - root.offsetHeight) / 2.4; }
+  if (x + root.offsetWidth > dw) x = Math.max(0, dw - root.offsetWidth);
+  if (y + 40 > dh) y = 0;
+  root.style.left = Math.max(0, x)+'px'; root.style.top = Math.max(0, y)+'px';
+  w.root = root; w.titleEl = titleEl;
+  w.setTitle = t => { titleEl.textContent = t; if (w.btnLabel) w.btnLabel.textContent = t; };
+  if (o.taskbar !== false){
+    w.btnLabel = h('span', { class:'tl' }, o.title);
+    w.btn = h('button', { class:'task', on:{ click: () => { if (activeWin === w && !w.min) minWin(w); else focusWin(w); } } }, o.icon === null ? null : ico(o.icon || 'app', 16), w.btnLabel);
+    tasks.append(w.btn);
+  }
+  wins.add(w); if (o.key) keyed.set(o.key, w);
+  if (innerWidth < 720 && maximizable) toggleMax(w);
+  focusWin(w);
+  return w;
+}
+
+function closeMenus(){ document.querySelectorAll('.mi.open').forEach(x => x.classList.remove('open')); }
+function menubar(defs){
+  const bar = h('div', { class:'menubar' });
+  defs.forEach(d => {
+    const item = h('span', { class:'mi' }, d.label);
+    const dd = h('div', { class:'dd' });
+    d.items.forEach(it => {
+      if (it === '-') dd.append(h('div', { class:'sep' }));
+      else dd.append(h('div', { class:'ddi', on:{ click: () => { closeMenus(); if (it.run) it.run(); } } }, it.label));
+    });
+    item.append(dd);
+    item.addEventListener('pointerdown', e => {
+      if (e.target.closest('.dd')) return;
+      e.stopPropagation();
+      const was = item.classList.contains('open'); closeMenus(); if (!was) item.classList.add('open');
+    });
+    bar.append(item);
+  });
+  return bar;
+}
+document.addEventListener('pointerdown', e => { if (!e.target.closest('.mi')) closeMenus(); }, true);
+
+function msgBox(o){
+  let win;
+  const row = h('div', { class:'brow' });
+  (o.buttons || [{ label:'OK' }]).forEach(b => row.append(h('button', { class:'b', on:{ click: () => { closeWin(win); if (b.run) b.run(); } } }, b.label)));
+  const content = h('div', { class:'msg' }, h('div', { class:'mrow' }, ico(o.icon || 'info', 32), h('div', { class:'mtxt', text:o.text })), row);
+  win = createWindow({ title:o.title || CONFIG.siteName, icon:null, w:o.w || 320, content, center:true, resizable:false, minimizable:false, taskbar:false });
+  const first = row.firstChild; if (first) first.focus();
+  return win;
+}
+
+function balloon(title, text, url){
+  const old = $('.balloon'); if (old) old.remove();
+  const b = h('div', { class:'balloon' },
+    h('b', { text:title }), h('br'), text,
+    url ? [h('br'), h('a', { href:url, target:'_blank', rel:'noopener' }, 'Did not open? Click here.')] : null,
+    h('span', { class:'x', on:{ click: () => b.remove() } }, '\u00D7'));
+  document.body.append(b);
+  setTimeout(() => b.remove(), 7000);
+}
+
+/* =====================================================================
+   opening things
+   ===================================================================== */
+function openUrl(url, name){
+  window.open(url, '_blank', 'noopener');
+  balloon('Launching '+name, 'Opening in a new tab...', url);
+}
+function launchApp(a){ openUrl(a.url, a.name); }
+function openNode(node, name, ctx){
+  switch (node.type){
+    case 'folder': openExplorer(ctx.tree, [...ctx.path, name]); break;
+    case 'text': openNotepad(name, node.content); break;
+    case 'link': case 'app': openUrl(node.url, node.label || name); break;
+    case 'program': programs[node.run](); break;
+    case 'dialog': msgBox({ title:name, text:node.msg, icon:'warn' }); break;
+  }
+}
+function bindOpen(el, open, select){
+  if (COARSE) el.addEventListener('click', open);
+  else { el.addEventListener('click', select); el.addEventListener('dblclick', open); }
+  el.addEventListener('keydown', e => { if (e.key === 'Enter') open(); });
+}
+
+function openNotepad(name, text){
+  const ta = h('textarea', { class:'pad', spellcheck:'false' }); ta.value = text || '';
+  let win;
+  const mb = menubar([
+    { label:'File', items:[ { label:'Exit', run: () => closeWin(win) } ] },
+    { label:'Help', items:[ { label:'About Notepad', run: () => msgBox({ title:'About Notepad', icon:'info', text:'Notepad for ZachOS 95.\nIt does not save anything. Nothing here does.' }) } ] }
+  ]);
+  win = createWindow({ title:(name || 'Untitled')+' - Notepad', icon:'text', w:480, h:340, menu:mb, content:ta });
+  return win;
+}
+
+function addrOf(tree, path){
+  if (tree === 'bin') return 'Recycle Bin';
+  if (!path.length) return 'My Computer';
+  const parts = path.map((p, i) => i === 0 && p.indexOf('(C:)') > -1 ? 'C:' : p);
+  return parts.join('\\') + (parts.length === 1 ? '\\' : '');
+}
+function openExplorer(tree, path, key){
+  const st = { path: path.slice(), hist: [], sel: null };
+  const list = h('div', { class:'list sunken' });
+  const addr = h('div', { class:'addr sunken' });
+  const status = h('div', { class:'status sunken' });
+  const back = h('button', { class:'b', title:'Back', on:{ click: () => { if (st.hist.length){ st.path = st.hist.pop(); render(); } } } }, '\u2190 Back');
+  const up = h('button', { class:'b', title:'Up one level', on:{ click: () => go(st.path.slice(0, -1)) } }, '\u2191 Up');
+  let win;
+  const mb = menubar([
+    { label:'File', items:[ { label:'Close', run: () => closeWin(win) } ] },
+    { label:'Go', items:[ { label:'My Computer', run: () => { if (tree === 'computer') go([]); } }, { label:'Applications', run: () => { if (tree === 'computer') go(['Zach (C:)', 'Applications']); } }, { label:'My Documents', run: () => { if (tree === 'computer') go(['Zach (C:)', 'My Documents']); } } ] },
+    { label:'Help', items:[ { label:'About', run: () => msgBox({ title:'About', icon:'info', text:'Explorer for ZachOS 95.' }) } ] }
+  ]);
+  const content = h('div', { class:'body', style:'flex:1;display:flex;flex-direction:column;min-height:0' },
+    h('div', { class:'tool' }, back, up, addr), list, status);
+  win = createWindow({ key, title:'Explorer', icon:'folder', w:540, h:360, menu:mb, content });
+  function go(p){ if (JSON.stringify(p) === JSON.stringify(st.path)) return; st.hist.push(st.path); st.path = p; render(); }
+  function render(){
+    const node = getNode(tree, st.path);
+    const names = Object.keys(node.children);
+    if (st.path.length || tree === 'bin'){
+      names.sort((a, b) => {
+        const fa = node.children[a].type === 'folder', fb = node.children[b].type === 'folder';
+        return fa !== fb ? (fa ? -1 : 1) : a.localeCompare(b);
+      });
+    }
+    list.textContent = ''; st.sel = null;
+    names.forEach(name => {
+      const n = node.children[name];
+      const it = h('div', { class:'item', tabindex:'0', role:'button' }, ico(nodeIcon(n), 32), h('span', { class:'lbl', text:name }));
+      bindOpen(it,
+        () => { if (n.type === 'folder') go([...st.path, name]); else openNode(n, name, { tree, path: st.path }); },
+        () => { if (st.sel) st.sel.classList.remove('sel'); st.sel = it; it.classList.add('sel'); });
+      list.append(it);
+    });
+    addr.textContent = addrOf(tree, st.path);
+    status.textContent = names.length+' object(s)';
+    back.disabled = !st.hist.length; up.disabled = !st.path.length;
+    const last = st.path.length ? st.path[st.path.length - 1] : (tree === 'bin' ? 'Recycle Bin' : 'My Computer');
+    win.setTitle(last);
+    const ic = win.root.querySelector('.titlebar .ic'); if (ic) ic.innerHTML = svg(st.path.length ? (st.path.length === 1 && tree === 'computer' ? 'drive' : 'folder') : (tree === 'bin' ? 'bin' : 'computer'), 16);
+  }
+  list.addEventListener('pointerdown', e => { if (e.target === list && st.sel){ st.sel.classList.remove('sel'); st.sel = null; } });
+  render();
+  return win;
+}
+
+/* =====================================================================
+   MS-DOS prompt
+   ===================================================================== */
+function findChild(n, name){
+  if (!n || n.type !== 'folder') return null;
+  const lc = name.toLowerCase();
+  for (const k in n.children) if (k.toLowerCase() === lc) return k;
+  for (const k in n.children) if (k.toLowerCase().replace(/\.[^.]+$/, '') === lc) return k;
+  return null;
+}
+function findApp(q){ q = q.toLowerCase(); return CONFIG.apps.find(a => a.id.toLowerCase() === q || a.name.toLowerCase() === q); }
+function openDos(){
+  const out = h('div', { class:'dos' });
+  const cwd = ['Zach (C:)'];
+  const prompt = () => 'C:\\' + cwd.slice(1).join('\\') + '>';
+  const pr = h('span'), inp = h('input', { type:'text', autocomplete:'off', autocapitalize:'off', spellcheck:'false', 'aria-label':'Command' });
+  const line = h('div', {}, pr, inp);
+  const hist = []; let hi = 0;
+  const print = t => { line.before(h('div', { text: t === '' ? '\u00A0' : t })); out.scrollTop = out.scrollHeight; };
+  const lines = t => String(t).split('\n').forEach(print);
+  const here = () => getNode('computer', cwd);
+  lines('ZachOS 95 [Version 4.00.95]\n(C) Copyright Zach of All Trades 1986-2026.\n\nType HELP for a list of commands.\n');
+  out.append(line);
+  const setPrompt = () => { pr.textContent = prompt(); };
+  setPrompt();
+  const cmds = {
+    help(){ lines('Commands:\n  DIR            list files\n  CD <dir>       change directory\n  TYPE <file>    show a text file\n  START <name>   open a file, folder or app\n  CLS            clear the screen\n  VER  DATE  TIME  WHOAMI  MEM  PING\n  EXIT           close this window\n\n(There may be hidden commands.)'); },
+    dir(){
+      const n = here(); const names = Object.keys(n.children);
+      lines(' Volume in drive C is ZACH\n Directory of '+prompt().slice(0, -1)+'\n');
+      let f = 0, d = 0;
+      names.forEach(k => {
+        const c = n.children[k];
+        if (c.type === 'folder'){ d++; print(k.toUpperCase().padEnd(34).slice(0, 34)+'<DIR>'); }
+        else { f++; print(k.toUpperCase().padEnd(34).slice(0, 34)+String((c.content || c.url || '').length + 128).padStart(8)); }
+      });
+      lines('\n        '+f+' file(s)\n        '+d+' dir(s)  640 KB free\n');
+    },
+    cd(a){
+      if (!a){ print(prompt().slice(0, -1)); return; }
+      let p = cwd.slice();
+      const abs = /^[\\/]/.test(a); if (abs) p = [cwd[0]];
+      for (const seg of a.split(/[\\/]/)){
+        if (!seg || seg === '.') continue;
+        if (seg === '..'){ if (p.length > 1) p.pop(); continue; }
+        const k = findChild(getNode('computer', p), seg);
+        if (!k || getNode('computer', p).children[k].type !== 'folder'){ print('Invalid directory'); return; }
+        p.push(k);
+      }
+      cwd.length = 0; p.forEach(x => cwd.push(x));
+    },
+    type(a){
+      if (!a){ print('Required parameter missing'); return; }
+      const k = findChild(here(), a); const n = k && here().children[k];
+      if (!n){ print('File not found - '+a.toUpperCase()); return; }
+      if (n.type === 'text') lines(n.content); else print('Cannot display this file type.');
+    },
+    start(a){
+      if (!a){ print('Required parameter missing'); return; }
+      const k = findChild(here(), a);
+      if (k){ openNode(here().children[k], k, { tree:'computer', path:cwd.slice() }); return; }
+      const app = findApp(a); if (app){ launchApp(app); return; }
+      print('Bad command or file name');
+    },
+    cls(){ [...out.children].forEach(c => { if (c !== line) c.remove(); }); },
+    ver(){ print('ZachOS 95 [Version 4.00.95]'); },
+    date(){ print('Current date is '+new Date().toLocaleDateString()); },
+    time(){ print('Current time is '+new Date().toLocaleTimeString()); },
+    whoami(){ print('guest (but you are always welcome here)'); },
+    mem(){ lines('655360 bytes total conventional memory\n655360 bytes available to MS-DOS\n 640K ought to be enough for anybody.'); },
+    echo(a){ print(a || 'ECHO is on.'); },
+    ping(a){
+      const host = a || 'zachofalltrade.com';
+      lines('Pinging '+host+' [127.0.0.1] with 32 bytes of data:\n');
+      for (let i = 0; i < 4; i++) print('Reply from 127.0.0.1: bytes=32 time<10ms TTL=128');
+      lines('\nPing statistics: Sent = 4, Received = 4, Lost = 0 (0% loss)');
+    },
+    exit(){ closeWin(win); },
+    sudo(){ print('Nice try. This is a 1995 operating system. There is no sudo, only vibes.'); },
+    format(){ print('Formatting C: ... just kidding. Nothing was harmed.'); },
+    del(){ print('Access denied. The files are load bearing.'); },
+    win(){ print('ZachOS is already running.'); },
+    doom(){ print('Not enough memory to run DOOM. (Need 4 MB, have 640 KB.)'); },
+    xyzzy(){ print('Nothing happens.'); },
+    coffee(){ print('Error 418: I am a teapot. Brewing anyway... done.'); },
+    about(){ lines('Zach of All Trades\nAI Adoption Leader, IBM Consulting\nBuilds apps on the side. Collects retro hardware.'); }
+  };
+  cmds.ls = cmds.dir; cmds.chdir = cmds.cd; cmds.cat = cmds.type; cmds.more = cmds.type; cmds.open = cmds.start; cmds.run = cmds.start; cmds.clear = cmds.cls; cmds.rm = cmds.del; cmds.quit = cmds.exit;
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'ArrowUp'){ e.preventDefault(); if (hi > 0){ hi--; inp.value = hist[hi]; } }
+    else if (e.key === 'ArrowDown'){ e.preventDefault(); if (hi < hist.length - 1){ hi++; inp.value = hist[hi]; } else { hi = hist.length; inp.value = ''; } }
+    else if (e.key === 'Enter'){
+      const raw = inp.value.trim(); inp.value = '';
+      print(prompt()+raw);
+      if (raw){ hist.push(raw); hi = hist.length;
+        let m = raw.match(/^(\S+)\s*(.*)$/); let c = m[1].toLowerCase(), a = m[2].replace(/^"|"$/g, '');
+        if (c === 'cd..'){ c = 'cd'; a = '..'; }
+        if (cmds[c]) cmds[c](a);
+        else { const app = findApp(raw); if (app) launchApp(app); else print('Bad command or file name'); }
+      }
+      setPrompt(); out.scrollTop = out.scrollHeight;
+    }
+  });
+  out.addEventListener('click', () => { if (!getSelection().toString()) inp.focus(); });
+  const win = createWindow({ key:'dos', title:'MS-DOS Prompt', icon:'dos', w:560, h:340, content:out });
+  setTimeout(() => inp.focus(), 30);
+  return win;
+}
+
+/* =====================================================================
+   Minesweeper
+   ===================================================================== */
+function openMinesweeper(){
+  if (keyed.has('mines')){ focusWin(keyed.get('mines')); return; }
+  const W = 9, H = 9, M = 10;
+  let mine, adj, rev, flag, over, won, first, time, timer, flags;
+  const mineCnt = h('div', { class:'led sunken' }), timeCnt = h('div', { class:'led sunken' });
+  const face = h('button', { class:'face', title:'New game', on:{ click: reset } }, ':)');
+  const grid = h('div', { class:'mgrid sunken' }); grid.style.gridTemplateColumns = 'repeat('+W+',20px)';
+  const cells = [];
+  const led = n => String(Math.max(-99, Math.min(999, n))).padStart(3, '0');
+  const nb = i => { const x = i % W, y = (i / W) | 0, r = []; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++){ if (!dx && !dy) continue; const nx = x + dx, ny = y + dy; if (nx >= 0 && ny >= 0 && nx < W && ny < H) r.push(ny * W + nx); } return r; };
+  for (let i = 0; i < W * H; i++){ const c = h('button', { class:'cell', 'data-i':i, 'aria-label':'cell' }); cells.push(c); grid.append(c); }
+  function paint(){
+    cells.forEach((c, i) => {
+      let cls = 'cell', t = '';
+      if (rev[i]){ cls += ' r'; if (mine[i]){ t = '\u25CF'; if (over && !won && c.dataset.hit === '1') cls += ' boom'; } else if (adj[i]){ t = adj[i]; cls += ' n'+adj[i]; } }
+      else if (flag[i]){ t = (over && !won && !mine[i]) ? '\u2717' : '\u2691'; cls += ' f'; }
+      c.className = cls; c.textContent = t;
+    });
+    mineCnt.textContent = led(M - flags); timeCnt.textContent = led(time);
+  }
+  function reset(){
+    clearInterval(timer); timer = null;
+    mine = Array(W * H).fill(false); adj = Array(W * H).fill(0); rev = Array(W * H).fill(false); flag = Array(W * H).fill(false);
+    over = false; won = false; first = true; time = 0; flags = 0; face.textContent = ':)';
+    cells.forEach(c => { delete c.dataset.hit; }); paint();
+  }
+  function place(safe){
+    const ban = new Set([safe, ...nb(safe)]); let n = 0;
+    while (n < M){ const i = (Math.random() * W * H) | 0; if (!mine[i] && !ban.has(i)){ mine[i] = true; n++; } }
+    for (let i = 0; i < W * H; i++) adj[i] = nb(i).filter(j => mine[j]).length;
+  }
+  function reveal(i){
+    if (over || flag[i] || rev[i]) return;
+    if (first){ place(i); first = false; timer = setInterval(() => { time++; timeCnt.textContent = led(time); }, 1000); }
+    if (mine[i]){
+      over = true; clearInterval(timer); cells[i].dataset.hit = '1';
+      mine.forEach((m, j) => { if (m) rev[j] = true; }); face.textContent = 'X('; paint(); return;
+    }
+    const st = [i];
+    while (st.length){ const j = st.pop(); if (rev[j] || flag[j]) continue; rev[j] = true; if (!adj[j]) nb(j).forEach(k => { if (!rev[k]) st.push(k); }); }
+    if (rev.filter(Boolean).length === W * H - M){
+      over = won = true; clearInterval(timer); face.textContent = 'B)';
+      mine.forEach((m, j) => { if (m) flag[j] = true; }); flags = M;
+    }
+    paint();
+  }
+  function toggleFlag(i){ if (over || rev[i]) return; flag[i] = !flag[i]; flags += flag[i] ? 1 : -1; paint(); }
+  let lp = null, lpFired = false;
+  grid.addEventListener('pointerdown', e => {
+    const c = e.target.closest('.cell'); if (!c) return;
+    lpFired = false; if (!over) face.textContent = ':O';
+    if (e.pointerType === 'touch') lp = setTimeout(() => { lpFired = true; toggleFlag(+c.dataset.i); if (navigator.vibrate) navigator.vibrate(20); }, 400);
+  });
+  const rel = () => { clearTimeout(lp); if (!over) face.textContent = ':)'; };
+  grid.addEventListener('pointerup', rel); grid.addEventListener('pointerleave', rel);
+  grid.addEventListener('click', e => { const c = e.target.closest('.cell'); if (!c) return; if (lpFired){ lpFired = false; return; } reveal(+c.dataset.i); });
+  grid.addEventListener('contextmenu', e => { e.preventDefault(); const c = e.target.closest('.cell'); if (c) toggleFlag(+c.dataset.i); });
+  const content = h('div', { class:'mine' }, h('div', { class:'mtop sunken' }, mineCnt, face, timeCnt), grid);
+  const mb = menubar([
+    { label:'Game', items:[ { label:'New', run: reset }, '-', { label:'Exit', run: () => closeWin(win) } ] },
+    { label:'Help', items:[ { label:'How to play', run: () => msgBox({ title:'Minesweeper', icon:'info', text:'Click to reveal a square.\nRight-click (or long-press on touch) to flag a mine.\nNumbers show how many mines touch a square.' }) } ] }
+  ]);
+  const win = createWindow({ key:'mines', title:'Minesweeper', icon:'mine', w:226, menu:mb, content, resizable:false, onClose: () => clearInterval(timer) });
+  reset();
+}
+
+/* =====================================================================
+   system dialogs
+   ===================================================================== */
+function openSystem(){
+  const content = h('div', { style:'padding:6px 0 6px' },
+    h('div', { class:'tabs' }, h('div', { class:'tab' }, 'General')),
+    h('div', { class:'sheet', style:'display:flex;gap:16px;min-width:300px' },
+      ico('computer', 48),
+      h('div', {},
+        h('h4', { text:'System:' }), h('p', { text:'ZachOS 95' }), h('p', { text:'4.00.95 (Build 1986)' }),
+        h('h4', { text:'Registered to:' }), h('p', { text:CONFIG.ownerName }), h('p', { text:'of All Trades' }),
+        h('h4', { text:'Computer:' }), h('p', { text:'Genuine Human(R) Brain' }), h('p', { text:'Caffeine powered' }), h('p', { text:'640 KB RAM (ought to be enough)' }))),
+    h('div', { class:'brow', style:'padding:4px 0' }, h('button', { class:'b', on:{ click: () => closeWin(w) } }, 'OK')));
+  const w = createWindow({ key:'sys', title:'System Properties', icon:'computer', w:360, content, center:true, resizable:false, minimizable:false });
+}
+function openRun(){
+  const inp = h('input', { class:'field', type:'text', autocomplete:'off', autocapitalize:'off', spellcheck:'false', 'aria-label':'Open' });
+  let win;
+  const go = () => {
+    const v = inp.value.trim(); if (!v) return;
+    const lc = v.toLowerCase();
+    closeWin(win);
+    const app = findApp(lc);
+    if (app) return launchApp(app);
+    if (/^https?:\/\//.test(lc)) return openUrl(v, v);
+    if (lc === 'notepad') return openNotepad('Untitled', '');
+    if (lc === 'cmd' || lc === 'command' || lc === 'command.com') return openDos();
+    if (lc === 'winmine' || lc === 'minesweeper') return openMinesweeper();
+    if (lc === 'explorer' || lc === 'c:' || lc === 'c:\\') return openExplorer('computer', [], 'exp:c');
+    if (lc === 'doom' || lc === 'doom.exe') return msgBox({ title:'DOOM', icon:'error', text:'Not enough memory to run DOOM.\n\nNeed 4 MB. Have 640 KB.' });
+    if (lc === 'xyzzy') return msgBox({ title:CONFIG.siteName, icon:'info', text:'Nothing happens.' });
+    msgBox({ title:v, icon:'error', text:"Cannot find '"+v+"'. Make sure you typed the name correctly, and then try again." });
+  };
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+  const content = h('div', { class:'msg', style:'min-width:320px' },
+    h('div', { class:'mrow' }, ico('app', 32), h('div', { class:'mtxt', text:'Type the name of a program, folder, or app, and ZachOS will open it for you.' })),
+    h('div', { style:'display:flex;gap:8px;align-items:center;margin-bottom:14px' }, h('span', { text:'Open:' }), inp),
+    h('div', { class:'brow' }, h('button', { class:'b', on:{ click: go } }, 'OK'), h('button', { class:'b', on:{ click: () => closeWin(win) } }, 'Cancel')));
+  win = createWindow({ title:'Run', icon:'app', w:360, content, center:true, resizable:false, minimizable:false, taskbar:false });
+  setTimeout(() => inp.focus(), 30);
+}
+function shutdownDialog(){
+  let win, mode = 'down';
+  const opt = (v, label) => { const r = h('input', { type:'radio', name:'sd' }); if (v === 'down') r.checked = true; r.addEventListener('change', () => { mode = v; }); return h('label', { class:'radio' }, r, label); };
+  const content = h('div', { class:'msg' },
+    h('div', { class:'mrow' }, ico('computer', 32), h('div', {}, h('div', { class:'mtxt', text:'What do you want the computer to do?' }), opt('down', 'Shut down the computer?'), opt('restart', 'Restart the computer?'))),
+    h('div', { class:'brow' }, h('button', { class:'b', on:{ click: () => { closeWin(win); doShutdown(mode); } } }, 'Yes'), h('button', { class:'b', on:{ click: () => closeWin(win) } }, 'No')));
+  win = createWindow({ title:'Shut Down ZachOS', icon:null, w:340, content, center:true, resizable:false, minimizable:false, taskbar:false });
+}
+function doShutdown(mode){
+  const reboot = () => { try { sessionStorage.removeItem('zoat_booted'); } catch (e) {} location.reload(); };
+  const off = h('div', { id:'off', class:'blue' }, 'ZachOS is shutting down...');
+  document.body.append(off);
+  setTimeout(() => {
+    if (mode === 'restart'){ reboot(); return; }
+    off.className = ''; off.textContent = "It's now safe to turn off\nyour computer.\n\n(click anywhere to turn it back on)";
+    off.style.whiteSpace = 'pre-wrap'; off.addEventListener('click', reboot);
+  }, 1400);
+}
+const TIPS = [
+  'Double-click the Applications folder to find the things I have built. Open an app folder and double-click its .exe to launch it in a new tab.',
+  'My Documents has my resume and a bit more about me.',
+  'The Start menu has more than it looks like. Try Programs, then Accessories.',
+  'Right-click the desktop for a couple of options.',
+  'Leave the computer alone long enough and the screen saver will kick in.',
+  'Some say a certain cheat code from 1986 still works here.'
+];
+function openTips(){
+  let i = 0, win;
+  const txt = h('div', { class:'tipbox' }, h('b', { text:'Did you know...' }), h('div', { class:'t' }));
+  const show = () => { $('.t', txt).textContent = (COARSE && i === 0 ? 'On a phone or tablet, tap once to open things. Long-press a Minesweeper square to flag it.\n\n' : '') + TIPS[i]; };
+  const chk = h('input', { type:'checkbox' }); chk.checked = true;
+  show();
+  const content = h('div', {},
+    h('div', { class:'tip' }, ico('bulb', 32), txt),
+    h('div', { style:'display:flex;justify-content:space-between;align-items:center;padding:0 12px 12px;gap:10px;flex-wrap:wrap' },
+      h('label', { class:'radio', style:'margin:0' }, chk, 'Show this on startup'),
+      h('div', { class:'brow' },
+        h('button', { class:'b', on:{ click: () => { i = (i + 1) % TIPS.length; show(); } } }, 'Next Tip'),
+        h('button', { class:'b', on:{ click: () => closeWin(win) } }, 'Close'))));
+  win = createWindow({ key:'tips', title:'Welcome to ZachOS', icon:null, w:420, content, center:true, resizable:false, minimizable:false, taskbar:false,
+    onClose: () => { try { if (!chk.checked) localStorage.setItem('zoat_notips', '1'); else localStorage.removeItem('zoat_notips'); } catch (e) {} } });
+}
+
+const programs = {
+  notepad: () => openNotepad('Untitled', ''),
+  dos: openDos,
+  minesweeper: openMinesweeper,
+  explorer: () => openExplorer('computer', [], 'exp:c'),
+  system: openSystem
+};
+
+/* =====================================================================
+   desktop icons, start menu, context menu
+   ===================================================================== */
+const APPS_PATH = ['Zach (C:)', 'Applications'], DOCS_PATH = ['Zach (C:)', 'My Documents'];
+const desktopItems = [
+  { name:'My Computer', icon:'computer', open: () => openExplorer('computer', [], 'exp:c') },
+  { name:'Applications', icon:'folder', open: () => openExplorer('computer', APPS_PATH, 'exp:apps') },
+  { name:'My Documents', icon:'folder', open: () => openExplorer('computer', DOCS_PATH, 'exp:docs') },
+  { name:'README.txt', icon:'text', open: () => openNotepad('README.txt',
+`Welcome to ZachOS 95.
+
+This is the portfolio of Zach of All Trades.
+
+  Applications   things I have built and host online
+  My Documents   resume and other papers
+  Start menu     a few more goodies
+
+Best viewed at 800x600 in a browser from the late nineties. Anything newer is fine too.`) },
+  { name:'MS-DOS Prompt', icon:'dos', open: openDos },
+  { name:'Minesweeper', icon:'mine', open: openMinesweeper },
+  { name:'Recycle Bin', icon:'bin', open: () => openExplorer('bin', [], 'exp:bin') }
+];
+const iconsEl = $('#icons');
+let selIcon = null;
+desktopItems.forEach(d => {
+  const el = h('div', { class:'dicon', tabindex:'0', role:'button' }, ico(d.icon, 32), h('span', { class:'lbl', text:d.name }));
+  bindOpen(el, d.open, () => { if (selIcon) selIcon.classList.remove('sel'); selIcon = el; el.classList.add('sel'); });
+  iconsEl.append(el);
+});
+desk.addEventListener('pointerdown', e => {
+  if (e.target === desk || e.target === iconsEl){ if (selIcon){ selIcon.classList.remove('sel'); selIcon = null; } }
+});
+
+const startBtn = $('#start'), startMenu = $('#startmenu');
+startBtn.append(ico('logo', 18), h('span', { text:'Start' }));
+function buildMenu(items, top){
+  const ul = h('ul', { class:'sm' });
+  items.forEach(it => {
+    if (it === '-'){ ul.append(h('li', { class:'sep' })); return; }
+    const li = h('li', { class:(top ? 'top ' : '')+(it.sub ? 'arrow' : '') }, ico(it.icon || 'folder', top ? 28 : 16), h('span', { text:it.label }));
+    if (it.sub){
+      li.append(buildMenu(it.sub, false));
+      li.addEventListener('click', e => { if (e.target.closest('.sm .sm') && e.target.closest('.sm .sm') !== li.querySelector(':scope>.sm')) return; e.stopPropagation(); li.classList.toggle('open'); });
+    } else {
+      li.addEventListener('click', e => { e.stopPropagation(); closeStart(); it.run(); });
+    }
+    ul.append(li);
+  });
+  return ul;
+}
+function appItems(){ return CONFIG.apps.map(a => ({ label:a.name, icon:a.icon || 'app', run: () => launchApp(a) })); }
+const menuItems = [
+  { label:'Programs', icon:'folder', sub:[
+    { label:'Applications', icon:'folder', sub: appItems().length ? appItems() : [{ label:'(Empty)', icon:'folder', run: () => {} }] },
+    { label:'Accessories', icon:'folder', sub:[
+      { label:'Notepad', icon:'text', run: programs.notepad },
+      { label:'MS-DOS Prompt', icon:'dos', run: programs.dos },
+      { label:'Minesweeper', icon:'mine', run: programs.minesweeper }
+    ] }
+  ] },
+  { label:'Documents', icon:'folder', run: desktopItems[2].open },
+  { label:'About Me', icon:'text', run: () => openNotepad('About Me.txt', (CONFIG.documents.find(d => d.name === 'About Me.txt') || { content:'' }).content) },
+  { label:'Run...', icon:'app', run: openRun },
+  '-',
+  { label:'Shut Down...', icon:'computer', run: shutdownDialog }
+];
+startMenu.append(h('div', { class:'sbanner' }, 'ZachOS 95'), buildMenu(menuItems, true));
+function closeStart(){ startMenu.classList.remove('show'); startBtn.classList.remove('on'); startMenu.querySelectorAll('li.open').forEach(l => l.classList.remove('open')); }
+startBtn.addEventListener('click', e => { e.stopPropagation(); const s = startMenu.classList.toggle('show'); startBtn.classList.toggle('on', s); });
+document.addEventListener('pointerdown', e => { if (!e.target.closest('#startmenu') && !e.target.closest('#start')) closeStart(); }, true);
+document.addEventListener('keydown', e => { if (e.key === 'Escape'){ closeStart(); closeCtx(); closeMenus(); } });
+
+let ctxEl = null;
+function closeCtx(){ if (ctxEl){ ctxEl.remove(); ctxEl = null; } }
+desk.addEventListener('contextmenu', e => {
+  if (e.target.closest('.win')) return;
+  e.preventDefault(); closeCtx();
+  const mk = (label, fn) => h('div', { class:'ddi', on:{ click: () => { closeCtx(); fn(); } } }, label);
+  ctxEl = h('div', { class:'ctx' },
+    mk('Refresh', () => { iconsEl.style.visibility = 'hidden'; setTimeout(() => { iconsEl.style.visibility = ''; }, 120); }),
+    mk('Screen Saver', startSaver),
+    h('div', { class:'sep' }),
+    mk('Properties', openSystem));
+  document.body.append(ctxEl);
+  ctxEl.style.left = Math.min(e.clientX, innerWidth - ctxEl.offsetWidth - 2)+'px';
+  ctxEl.style.top = Math.min(e.clientY, innerHeight - ctxEl.offsetHeight - 30)+'px';
+});
+document.addEventListener('pointerdown', e => { if (!e.target.closest('.ctx')) closeCtx(); }, true);
+
+const clock = $('#clock');
+const tick = () => { clock.textContent = new Date().toLocaleTimeString([], { hour:'numeric', minute:'2-digit' }); };
+tick(); setInterval(tick, 10000);
+$('#tray').addEventListener('dblclick', () => msgBox({ title:'Date/Time Properties', icon:'info', text:new Date().toLocaleString([], { dateStyle:'full', timeStyle:'short' }) }));
+
+/* =====================================================================
+   easter eggs: konami code, cheat words, blue screen, screen saver
+   ===================================================================== */
+const KONAMI = ['arrowup','arrowup','arrowdown','arrowdown','arrowleft','arrowright','arrowleft','arrowright','b','a'];
+let buf = [];
+document.addEventListener('keydown', e => {
+  if (e.key.length > 1 && e.key.indexOf('Arrow') !== 0) return;
+  const typing = /^(input|textarea)$/i.test(e.target.tagName);
+  buf.push(e.key.toLowerCase()); buf = buf.slice(-10);
+  if (buf.join() === KONAMI.join()){ buf = []; showBsod(); return; }
+  if (!typing){
+    const s = buf.filter(k => k.length === 1).join('');
+    if (/idkfa$/.test(s)){ buf = []; msgBox({ title:'DOOM', icon:'info', text:'Cheat activated: full health, all keys, and an alarming number of browser tabs.' }); }
+    else if (/xyzzy$/.test(s)){ buf = []; msgBox({ title:CONFIG.siteName, icon:'info', text:'Nothing happens.' }); }
+  }
+});
+function showBsod(){
+  if ($('#bsod')) return;
+  const b = h('div', { id:'bsod' }, h('div', { style:'text-align:center;margin-bottom:24px' }, h('b', { text:' ZachOS 95 ' })),
+`A fatal exception 0E has occurred at 0028:C0011E36 in VXD VMM(01) + 00010E36. The current application will be terminated.
+
+Cause: Konami code detected. Honestly, this one is not your fault.
+
+*  Press any key to terminate the current application.
+*  Press CTRL+ALT+DEL again to restart your computer. You will lose any unsaved information in all applications.
+
+                       Press any key to continue _`);
+  document.body.append(b);
+  const kill = () => { b.remove(); document.removeEventListener('keydown', kill, true); };
+  setTimeout(() => { document.addEventListener('keydown', kill, true); b.addEventListener('pointerdown', kill); }, 400);
+}
+let idleT, saverOn = false;
+function resetIdle(){ clearTimeout(idleT); if (!saverOn) idleT = setTimeout(startSaver, 120000); }
+function startSaver(){
+  if (saverOn) return; saverOn = true; closeStart(); closeCtx();
+  const c = h('canvas', { id:'saver' }); document.body.append(c);
+  c.width = innerWidth; c.height = innerHeight;
+  const ctx = c.getContext('2d');
+  const stars = Array.from({ length:220 }, () => ({ x:(Math.random() - .5) * 2, y:(Math.random() - .5) * 2, z:Math.random() }));
+  let raf;
+  const frame = () => {
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.fillStyle = '#fff';
+    for (const s of stars){
+      s.z -= 0.006;
+      if (s.z <= 0.02){ s.x = (Math.random() - .5) * 2; s.y = (Math.random() - .5) * 2; s.z = 1; }
+      const px = c.width / 2 + s.x / s.z * c.width / 4, py = c.height / 2 + s.y / s.z * c.height / 4, r = Math.max(1, (1 - s.z) * 3);
+      ctx.fillRect(px, py, r, r);
+    }
+    raf = requestAnimationFrame(frame);
+  };
+  frame();
+  let armed = false; setTimeout(() => { armed = true; }, 500);
+  const stop = () => { cancelAnimationFrame(raf); c.remove(); saverOn = false; window.removeEventListener('keydown', stop, true); window.removeEventListener('pointerdown', stop, true); window.removeEventListener('pointermove', mv, true); resetIdle(); };
+  const mv = () => { if (armed) stop(); };
+  window.addEventListener('keydown', stop, true); window.addEventListener('pointerdown', stop, true); window.addEventListener('pointermove', mv, true);
+}
+['pointermove', 'pointerdown', 'keydown'].forEach(ev => document.addEventListener(ev, resetIdle, true));
+resetIdle();
+
+/* =====================================================================
+   boot sequence
+   ===================================================================== */
+function boot(){
+  const b = $('#boot');
+  let seen = false; try { seen = !!sessionStorage.getItem('zoat_booted'); } catch (e) {}
+  if (seen || /noboot/.test(location.search)){ b.remove(); return Promise.resolve(); }
+  return new Promise(resolve => {
+    b.style.display = 'block';
+    const lines = [
+      'ZachOS BIOS v1.0, An Over-Caffeinated Production',
+      'Copyright (C) 1986-2026 Zach of All Trades, Inc.', '',
+      'CPU: Pentium-ish 100 MHz',
+      'Memory Test: 640K OK',
+      'Detecting Primary Master ... Hard Drive of Many Hats',
+      'Detecting Secondary Master ... CD-ROM', '',
+      'Press any key to skip...', '',
+      'Starting ZachOS 95...'
+    ];
+    let done = false; const timers = [];
+    const finish = () => {
+      if (done) return; done = true; timers.forEach(clearTimeout);
+      try { sessionStorage.setItem('zoat_booted', '1'); } catch (e) {}
+      document.removeEventListener('keydown', finish); b.remove(); resolve();
+    };
+    lines.forEach((l, i) => timers.push(setTimeout(() => { b.append(l + '\n'); }, 160 + i * 130)));
+    timers.push(setTimeout(() => {
+      b.textContent = '';
+      b.append(h('div', { class:'splash' }, h('h1', { text:'ZachOS 95' }), h('p', { text:'Starting up...' }), h('div', { class:'pbar' }, h('i'))));
+    }, 160 + lines.length * 130 + 300));
+    timers.push(setTimeout(finish, 160 + lines.length * 130 + 2300));
+    b.addEventListener('pointerdown', finish); document.addEventListener('keydown', finish);
+  });
+}
+boot().then(() => {
+  let hide = false; try { hide = !!localStorage.getItem('zoat_notips'); } catch (e) {}
+  if (!hide) setTimeout(openTips, 350);
+});
+})();
+</script>
+</body>
+</html>
