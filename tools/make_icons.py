@@ -687,6 +687,18 @@ icons['c_default'] = finish(disky40(disky()))
 icons['c_default_blink'] = finish(disky40(disky(blink=True)))
 icons['c_default_wave'] = finish(disky40(disky(wave=True)))
 
+def image32():
+    c = Canvas()
+    c.bevel(3, 5, 26, 22); c.rect(5, 7, 22, 18, 'C'); c.disc(21, 12, 3, 'Y')
+    poly(c, [(5,25),(5,18),(12,14),(18,20),(22,17),(27,22),(27,25)], 'e'); c.rect(5, 23, 22, 2, 'e')
+    c.outline(); return c
+def image16():
+    c = Canvas(16)
+    c.bevel(1, 2, 14, 12); c.rect(3, 4, 10, 8, 'C'); c.rect(10, 5, 2, 2, 'Y')
+    poly(c, [(3,12),(3,9),(6,7),(9,10),(11,9),(13,11),(13,12)], 'e')
+    c.outline(); return c
+icons['image'] = image32(); S16['image'] = image16()
+
 pix32 = {k: v.rows() for k, v in icons.items()}
 pix16 = {k: v.rows() for k, v in S16.items()}
 
