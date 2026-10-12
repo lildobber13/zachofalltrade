@@ -892,7 +892,7 @@ function openDos(){
     cls(){ [...out.children].forEach(c => { if (c !== line) c.remove(); }); },
     ver(){ print('ZachOS 95 [Version 4.00.95]'); },
     date(){ print('Current date is '+new Date().toLocaleDateString()); },
-    time(){ print('Current time is '+new Date().toLocaleTimeString()); },
+    time(){ print('Current time in Detroit is '+new Date().toLocaleTimeString([], { timeZone:'America/Detroit' })); },
     whoami(){ print('guest (but you are always welcome here)'); },
     mem(){ lines('655360 bytes total conventional memory\n655360 bytes available to MS-DOS\n 640K ought to be enough for anybody.'); },
     echo(a){ print(a || 'ECHO is on.'); },
@@ -1251,9 +1251,10 @@ desk.addEventListener('contextmenu', e => {
 document.addEventListener('pointerdown', e => { if (!e.target.closest('.ctx')) closeCtx(); }, true);
 
 const clock = $('#clock');
-const tick = () => { clock.textContent = new Date().toLocaleTimeString([], { hour:'numeric', minute:'2-digit' }); };
+const TZ = 'America/Detroit', PLACE = innerWidth < 640 ? 'Detroit, MI' : 'Detroit, Michigan';
+const tick = () => { clock.textContent = PLACE + '   ' + new Date().toLocaleTimeString([], { hour:'numeric', minute:'2-digit', timeZone:TZ }); };
 tick(); setInterval(tick, 10000);
-$('#tray').addEventListener('dblclick', () => msgBox({ title:'Date/Time Properties', icon:'info', text:new Date().toLocaleString([], { dateStyle:'full', timeStyle:'short' }) }));
+$('#tray').addEventListener('dblclick', () => msgBox({ title:'Date/Time Properties', icon:'info', text:'Detroit, Michigan\n\n' + new Date().toLocaleString([], { dateStyle:'full', timeStyle:'short', timeZone:TZ }) }));
 
 /* =====================================================================
    easter eggs: konami code, cheat words, blue screen, screen saver
