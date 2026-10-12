@@ -579,6 +579,31 @@ def doom16():
     return c
 icons['doom'] = doom32(); S16['doom'] = doom16()
 
+def disky(blink=False, wave=False):
+    c = Canvas()
+    # disk body
+    c.rect(5, 4, 22, 24, 'b'); c.rect(5, 4, 22, 1, 'B'); c.rect(5, 4, 1, 24, 'B'); c.rect(26, 4, 1, 24, 'K'); c.rect(5, 27, 22, 1, 'K')
+    c.set(5, 4, '.'); c.set(26, 4, '.')
+    poly(c, [(22,4),(27,4),(27,9)], '.')
+    # metal shutter
+    c.rect(10, 4, 12, 8, 'g'); c.rect(10, 4, 12, 1, 'W'); c.rect(10, 4, 1, 8, 'W'); c.rect(21, 4, 1, 8, 'G'); c.rect(10, 11, 12, 1, 'G')
+    c.rect(18, 6, 3, 4, 'K')
+    # label with face
+    c.rect(8, 15, 16, 12, 'W'); c.rect(8, 15, 16, 1, 'l')
+    if blink:
+        c.rect(11, 19, 3, 1, 'K'); c.rect(18, 19, 3, 1, 'K')
+    else:
+        c.rect(11, 17, 3, 4, 'K'); c.rect(18, 17, 3, 4, 'K'); c.set(11, 17, 'W'); c.set(18, 17, 'W')
+    c.rect(11, 15, 4, 1, 'G'); c.rect(18, 15, 4, 1, 'G')  # eyebrows
+    c.rect(12, 23, 8, 1, 'R'); c.set(11, 22, 'R'); c.set(20, 22, 'R'); c.rect(13, 24, 6, 1, 'r')
+    # little arms and feet
+    c.rect(2, 19, 3, 2, 'K'); c.rect(27, 17 if wave else 19, 3, 2, 'K')
+    if wave: c.rect(29, 14, 2, 3, 'K')
+    c.rect(9, 28, 4, 2, 'K'); c.rect(19, 28, 4, 2, 'K')
+    c.outline(); return c
+icons['disky'] = disky(); icons['disky_blink'] = disky(blink=True); icons['disky_wave'] = disky(wave=True)
+S16['disky'] = disky()
+
 pix32 = {k: v.rows() for k, v in icons.items()}
 pix16 = {k: v.rows() for k, v in S16.items()}
 
