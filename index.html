@@ -1091,12 +1091,17 @@ const menuItems = [
 startMenu.append(h('div', { class:'sbanner' }, 'ZachOS 95'), buildMenu(menuItems, true));
 function fitSub(li){
   const ul = li.querySelector(':scope>.sm'); if (!ul || innerWidth <= 640) return;
-  ul.style.top = ''; ul.classList.remove('left');
+  ul.style.top = ''; ul.style.maxHeight = ''; ul.style.overflowY = ''; ul.classList.remove('left');
   let r = ul.getBoundingClientRect();
   if (r.right > innerWidth){ ul.classList.add('left'); r = ul.getBoundingClientRect(); }
-  const limit = innerHeight - TB() - 2;
-  if (r.bottom > limit){ ul.style.top = (parseFloat(getComputedStyle(ul).top) - (r.bottom - limit)) + 'px'; r = ul.getBoundingClientRect(); }
-  if (r.top < 0) ul.style.top = (parseFloat(getComputedStyle(ul).top) - r.top) + 'px';
+  const limit = innerHeight - TB() - 2, base = parseFloat(getComputedStyle(ul).top);
+  if (r.bottom > limit) ul.style.top = (base - (r.bottom - limit)) + 'px';
+  r = ul.getBoundingClientRect();
+  if (r.top < 2){
+    ul.style.top = (base - r.top + 2 + (parseFloat(ul.style.top || base) - base)) + 'px';
+    r = ul.getBoundingClientRect();
+    if (r.bottom > limit && !ul.querySelector('li.arrow')){ ul.style.maxHeight = Math.max(80, limit - r.top) + 'px'; ul.style.overflowY = 'auto'; }
+  }
 }
 startMenu.addEventListener('mouseover', e => { const li = e.target.closest('li'); if (li) fitSub(li); });
 startMenu.addEventListener('click', e => { const li = e.target.closest('li.arrow'); if (li) fitSub(li); });
