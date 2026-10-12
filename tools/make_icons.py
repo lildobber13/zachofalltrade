@@ -559,6 +559,26 @@ def aian16():
 A32['aiadoptionnetwork'], A16['aiadoptionnetwork'] = aian32(), aian16()
 for k in A32: icons['app_' + k] = A32[k]; S16['app_' + k] = A16[k]
 
+def doom32():
+    c = Canvas()
+    c.rect(1, 1, 30, 30, 'K'); c.rect(1, 1, 30, 1, 'r'); c.rect(1, 1, 1, 30, 'r'); c.rect(30, 1, 1, 30, 'R'); c.rect(1, 30, 30, 1, 'R')
+    poly(c, [(6,12),(4,3),(11,8)], 'R'); poly(c, [(26,12),(28,3),(21,8)], 'R')
+    c.disc(16, 14, 8, 'W'); c.rect(11, 19, 10, 8, 'W'); c.rect(11, 19, 1, 8, 'g'); c.rect(20, 19, 1, 8, 'g')
+    c.rect(10, 12, 4, 5, 'K'); c.rect(18, 12, 4, 5, 'K'); c.rect(11, 14, 2, 2, 'R'); c.rect(19, 14, 2, 2, 'R')
+    c.rect(15, 18, 2, 2, 'K')
+    for x in (12, 14, 17, 19): c.rect(x, 23, 1, 4, 'K')
+    c.rect(12, 23, 8, 1, 'K')
+    return c
+def doom16():
+    c = Canvas(16)
+    c.rect(0, 0, 16, 16, 'K'); c.rect(0, 0, 16, 1, 'r'); c.rect(0, 0, 1, 16, 'r'); c.rect(15, 0, 1, 16, 'R'); c.rect(0, 15, 16, 1, 'R')
+    c.set(3, 2, 'R'); c.set(2, 1, 'R'); c.set(12, 2, 'R'); c.set(13, 1, 'R')
+    c.disc(8, 7, 4, 'W'); c.rect(5, 10, 6, 3, 'W')
+    c.rect(5, 6, 2, 2, 'K'); c.rect(9, 6, 2, 2, 'K'); c.set(6, 7, 'R'); c.set(9, 7, 'R'); c.set(7, 9, 'K'); c.set(8, 9, 'K')
+    for x in (6, 8, 10): c.set(x, 11, 'K')
+    return c
+icons['doom'] = doom32(); S16['doom'] = doom16()
+
 pix32 = {k: v.rows() for k, v in icons.items()}
 pix16 = {k: v.rows() for k, v in S16.items()}
 
