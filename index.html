@@ -87,8 +87,10 @@ button.b:focus-visible{outline:0.0625rem dotted #000;outline-offset:-0.3125rem}
 .disky{position:fixed;right:1rem;bottom:calc(1.75rem + 0.75rem);z-index:100000;display:flex;flex-direction:column;align-items:flex-end;gap:0.25rem;animation:dpop .25s ease-out;transition:opacity .3s,transform .3s}
 .disky.out{opacity:0;transform:translateY(0.5rem)}
 @keyframes dpop{from{transform:translateY(1rem);opacity:0}to{transform:none;opacity:1}}
-.dbubble{position:relative;width:15.5rem;max-width:calc(100vw - 2rem);background:#ffffe1;color:#000;border:0.0625rem solid #000;box-shadow:0.125rem 0.125rem 0 rgba(0,0,0,.35);padding:0.625rem 0.75rem;font-size:0.8125rem;line-height:1.35}
+.dbubble{position:relative;width:19rem;max-width:calc(100vw - 2rem);background:#ffffe1;color:#000;border:0.0625rem solid #000;box-shadow:0.125rem 0.125rem 0 rgba(0,0,0,.35);padding:0.625rem 0.75rem;font-size:0.8125rem;line-height:1.35}
 .dbubble::after{content:'';position:absolute;right:1.75rem;bottom:-0.5rem;width:0.75rem;height:0.75rem;background:#ffffe1;border-right:0.0625rem solid #000;border-bottom:0.0625rem solid #000;transform:rotate(45deg)}
+.dbubble{max-height:calc(100vh - 8rem);display:flex;flex-direction:column}.dlist{display:flex;flex-direction:column;gap:0.125rem;margin-top:0.5rem;overflow-y:auto;min-height:0;flex:1 1 auto}.dlist:empty{display:none}.dbubble .brow,.dbubble .dtext{flex:none}
+.dapp{display:flex;gap:0.5rem;align-items:flex-start;text-align:left;background:transparent;border:0;padding:0.1875rem 0.25rem;font:inherit;color:#000;cursor:pointer}.dapp:hover{background:#000080;color:#fff}.dapp span{display:flex;flex-direction:column}.dapp i{font-style:normal;font-size:0.75rem;opacity:.85}
 .dbubble.gone{display:none}.dbubble .brow{display:flex;flex-wrap:wrap;gap:0.375rem;margin-top:0.625rem}
 .dbubble button.b{padding:0.1875rem 0.5rem}
 .dface{cursor:pointer;margin-right:0.625rem;animation:dbob 2.4s ease-in-out infinite}.dface svg,.dface img{display:block}
@@ -224,29 +226,29 @@ const CONFIG = {
   // Each app becomes a folder inside Applications, with a Launch .exe inside it.
   // Double-clicking the .exe opens `url` in a new tab.
   apps: [
-    { id: "forg3d", name: "Forg3d", url: "/apps/forg3d", icon: "app_forg3d",
+    { id: "forg3d", blurb: "Talk to it and it builds 3D models you can print.", name: "Forg3d", url: "/apps/forg3d", icon: "app_forg3d",
       description: "Forg3D is a voice-controlled AI design studio that transforms spoken requests into interactive 3D models using generative AI. It allows makers to inspect their creations in real time and export them directly into Bambu Connect for seamless slicing and 3D printing." },
-    { id: "ghstwrtr", name: "ghstwrtr", url: "/apps/ghstwrtr", icon: "app_ghstwrtr",
+    { id: "ghstwrtr", blurb: "Turns your snippets into a book in your own voice.", name: "ghstwrtr", url: "/apps/ghstwrtr", icon: "app_ghstwrtr",
       description: "ghstwrtr is a minimalist book-building app that allows writers to assemble full manuscripts over time by capturing bite-sized snippets, thoughts, and stories. It leverages AI to match your unique voice and tone, automatically arranging your snippets into structured chapters with seamless bridge text and exporting publication-ready PDFs." },
-    { id: "motiondeckstudio", name: "MotionDeck Studio", url: "/apps/motiondeckstudio", icon: "app_motiondeckstudio",
+    { id: "motiondeckstudio", blurb: "Turns scripts and decks into animated videos.", name: "MotionDeck Studio", url: "/apps/motiondeckstudio", icon: "app_motiondeckstudio",
       description: "MotionDeck Studio is a cinematic motion-graphics and video creation platform that transforms scripts and pitch decks into dynamic, animated video presentations. It features an interactive multi-scene editor with customizable kinetic typography, visual background effects, timeline-synced royalty-free music, and one-click MP4 video export or shareable link generation." },
-    { id: "neverendingbacklog", name: "Never Ending Backlog", url: "/apps/neverendingbacklog", icon: "app_neverendingbacklog",
+    { id: "neverendingbacklog", blurb: "A synthwave hub for my Steam backlog.", name: "Never Ending Backlog", url: "/apps/neverendingbacklog", icon: "app_neverendingbacklog",
       description: "Never Ending Backlog is a synthwave-themed gaming hub that chronicles your journey through an ever-growing backlog with in-depth reviews and video embeds. It connects directly to your live Steam library to track unplayed titles, genre breakdowns, and completion stats alongside a searchable archive of your game catalog." },
-    { id: "studworkz", name: "Studworkz", url: "/apps/studworkz", icon: "app_studworkz",
+    { id: "studworkz", blurb: "Turns photos into LEGO mosaics with a parts list.", name: "Studworkz", url: "/apps/studworkz", icon: "app_studworkz",
       description: "Studworkz transforms any uploaded photo into a custom LEGO mosaic accurately mapped to real-world LEGO stud and tile color palettes. It calculates live parts costs, generates section-by-section PDF building instructions, and exports BrickLink-ready wanted lists so you can easily order the exact pieces to build it in real life." },
-    { id: "nerdroom", name: "Nerdroom", url: "/apps/nerdroom", icon: "app_nerdroom",
+    { id: "nerdroom", blurb: "Catalog your games, vinyl, LEGO and comics.", name: "Nerdroom", url: "/apps/nerdroom", icon: "app_nerdroom",
       description: "NerdRoom is an all-in-one collection management app built for hobbyists to catalog and organize board games, video games, vinyl records, LEGO sets, and comics in a single unified dashboard. It streamlines tracking with barcode scanning, rich metadata pulled directly from trusted databases like BGG, IGDB, and Discogs, custom condition ratings, wishlists, and deep collection statistics." },
-    { id: "nmotg", name: "No Memory Of This Game", url: "/apps/nmotg", icon: "app_nmotg",
+    { id: "nmotg", blurb: "A game journal so you remember where you left off.", name: "No Memory Of This Game", url: "/apps/nmotg", icon: "app_nmotg",
       description: "NMOTG (No Memory Of This Game) is a mobile-first gaming journal designed to help players pick up right where they left off across multiple video games. By combining a 500,000+ title database with date-stamped session notes, quest checklists, and retro-inspired themes, it ensures you never return to a game wondering what you were doing." },
-    { id: "passinote", name: "Passinote", url: "/apps/passinote", icon: "app_passinote",
+    { id: "passinote", blurb: "Instant shared notepad, no account needed.", name: "Passinote", url: "/apps/passinote", icon: "app_passinote",
       description: "Passinote is a zero-setup, ephemeral collaborative notepad that lets users create or join private writing sessions instantly using simple three-word passcodes, no accounts required. Multiple people can co-edit the same document live with full real-time synchronization, where every contributor's text and changes are styled in their own distinct color." },
-    { id: "fatemold", name: "Fatemold", url: "/apps/fatemold", icon: "app_fatemold",
+    { id: "fatemold", blurb: "Random character builds for Soulsborne games.", name: "Fatemold", url: "/apps/fatemold", icon: "app_fatemold",
       description: "Fatemold is a retro-styled character randomizer for Soulsborne titles, including Demon's Souls, Dark Souls I-III, Bloodborne, and Elden Ring. With an animated bonfire tavern aesthetic, it rolls complete thematic builds, including gender-matched names, classes, preferred weapons, starting gifts, and appearance details, which you can export as phone-ready portrait cards." },
-    { id: "speedr", name: "Speedr", url: "/apps/speedr", icon: "app_speedr",
+    { id: "speedr", blurb: "Speed reading, one word at a time.", name: "Speedr", url: "/apps/speedr", icon: "app_speedr",
       description: "Speedr is a rapid serial visual presentation (RSVP) speed-reading app that lets users upload PDFs, Word documents, or text files to read them one word at a time with a centered, highlighted pivot letter designed to minimize eye movement. It combines customizable reading speeds and automated speed scaling with curated ambient background music and adjustable visual themes for a seamless, distraction-free reading experience." },
-    { id: "onlyline", name: "Onlyline", url: "/apps/onlyline", icon: "app_onlyline",
+    { id: "onlyline", blurb: "Turns portraits into one continuous line drawing.", name: "Onlyline", url: "/apps/onlyline", icon: "app_onlyline",
       description: "Onlyline is a privacy-first web application that transforms portrait photos into single, unbroken continuous line drawings entirely in your browser using classical computer vision rather than generative AI. It animates the stroke in real time as if an artist were sketching it live, allowing you to fine-tune tracing parameters and export the finished artwork as an SVG or high-resolution image." },
-    { id: "aiadoptionnetwork", name: "AI Adoption Network", url: "/apps/aiadoptionnetwork", icon: "app_aiadoptionnetwork",
+    { id: "aiadoptionnetwork", blurb: "A gentle starting point for AI-hesitant people.", name: "AI Adoption Network", url: "/apps/aiadoptionnetwork", icon: "app_aiadoptionnetwork",
       description: "AI Adoption Network (AIAN) is a privacy-first web application designed to help AI-hesitant everyday people discover simple, practical ways AI can assist with things they already care about. Through a gentle, account-free onboarding flow saved entirely on their device, it generates a personalized starting journey with copyable beginner prompts, bite-sized daily activities, and safety tips tailored to their comfort level." }
   ],
 
@@ -1187,7 +1189,7 @@ const menuItems = [
     { label:'Web Browser', icon:'globe', run: programs.browser },
     { label:'DOOM', icon:'doom', run: programs.doom },
     { label:'Accessories', icon:'folder', sub:[
-      { label:'Disky (Assistant)', icon:'disky', run: () => showDisky() },
+      { label:'Disky (Assistant)', icon:'disky', run: () => showDisky('menu') },
       { label:'Notepad', icon:'text', run: programs.notepad },
       { label:'MS-DOS Prompt', icon:'dos', run: programs.dos },
       { label:'Minesweeper', icon:'mine', run: programs.minesweeper }
@@ -1271,35 +1273,62 @@ $('#tray').addEventListener('dblclick', () => msgBox({ title:'Date/Time Properti
    Disky, the helpful floppy disk
    ===================================================================== */
 let diskyEl = null;
-function showDisky(first){
-  if (diskyEl) { diskyEl.classList.remove('hide'); return; }
+function showDisky(start){
+  if (diskyEl){ diskyEl.classList.remove('out'); diskyEl._go && diskyEl._go(start || 'menu'); return; }
   const px = 64;
   const face = h('div', { class:'dface', html:svg('disky', px) });
   const setFace = n => { face.innerHTML = svg(n, px); };
   const say = h('div', { class:'dtext' });
+  const list = h('div', { class:'dlist' });
   const row = h('div', { class:'brow' });
-  const bubble = h('div', { class:'dbubble' }, say, row);
+  const bubble = h('div', { class:'dbubble' }, say, list, row);
   const el = h('div', { class:'disky' }, bubble, face);
   diskyEl = el;
-  let blinkT = null, byeT = null;
-  const bye = () => { clearInterval(blinkT); clearTimeout(byeT); el.classList.add('out'); setTimeout(() => { el.remove(); diskyEl = null; }, 300); };
-  const ask = () => {
-    say.textContent = "Hi! I'm Disky. It looks like you're visiting Zach's portfolio. Would you like to see his recent posts on LinkedIn?";
-    row.replaceChildren(
-      h('button', { class:'b', on:{ click: () => { openUrl(CONFIG.links.find(l => l.name === 'LinkedIn').url, 'LinkedIn'); thanks(); } } }, 'Yes, take me there'),
-      h('button', { class:'b', on:{ click: bye } }, 'Not now'),
-      h('button', { class:'b', on:{ click: () => { try { localStorage.setItem('zoat_nodisky', '1'); } catch (e) {} bye(); } } }, "Don't show again"));
+  let byeT = null;
+  const bye = () => { clearTimeout(byeT); clearInterval(blinkT); el.classList.add('out'); setTimeout(() => { el.remove(); if (diskyEl === el) diskyEl = null; }, 300); };
+  const btn = (label, fn) => h('button', { class:'b', on:{ click: fn } }, label);
+  const LI = () => (CONFIG.links.find(l => l.name === 'LinkedIn') || {}).url;
+  const view = (text, items, buttons) => {
+    clearTimeout(byeT);
+    say.textContent = text; list.replaceChildren(...(items || [])); row.replaceChildren(...buttons);
+    bubble.scrollTop = 0;
   };
+  const back = () => btn('Back', () => go('menu'));
+  const go = name => ({
+    ask: () => view("Hi! I'm Disky. It looks like you're visiting Zach's portfolio. Would you like to see his recent posts on LinkedIn?", null, [
+      btn('Yes, take me there', () => { openUrl(LI(), 'LinkedIn'); thanks(); }),
+      btn("What's on this computer?", () => go('menu')),
+      btn('Not now', bye),
+      btn("Don't show again", () => { try { localStorage.setItem('zoat_nodisky', '1'); } catch (e) {} bye(); })]),
+    menu: () => view("This is ZachOS 95, Zach's portfolio. What would you like to know about?", null, [
+      btn('Applications', () => go('apps')), btn('Resume', () => go('resume')), btn('Documents', () => go('docs')),
+      btn('Web Browser', () => go('browser')), btn('Games', () => go('games')), btn('LinkedIn', () => go('linkedin')),
+      btn('Close', bye)]),
+    apps: () => view('These are things Zach built and hosts online. Click one to open it in a new tab.',
+      CONFIG.apps.map(a => h('button', { class:'dapp', on:{ click: () => launchApp(a) } }, ico(a.icon || 'app', 16), h('span', {}, h('b', { text:a.name }), h('i', { text:a.blurb || '' })))),
+      [btn('Open Applications folder', () => desktopItems[1].open()), back()]),
+    resume: () => view("That's Zach's resume as a PDF. You can read it in a window here and save a copy to your own computer.", null, [
+      btn('Open Resume', () => openPdf('Resume.pdf', { url:CONFIG.resumePdfUrl, file:CONFIG.resumeFileName })), back()]),
+    docs: () => view("My Documents holds Zach's resume and an About Me note, plus a few other papers.", null, [
+      btn('Open My Documents', () => desktopItems[2].open()),
+      btn('About Me', () => openNotepad('About Me.txt', (CONFIG.documents.find(d => d.name === 'About Me.txt') || { content:'' }).content)), back()]),
+    browser: () => view("The Web Browser is a tiny browser built into this desktop. It shows Zach's GitHub profile and links to all the apps.", null, [
+      btn('Open Web Browser', () => openBrowser()), back()]),
+    games: () => view('Yes, there are games. Minesweeper is here, and DOOM really plays (shareware Episode 1, keyboard only).', null, [
+      btn('Play DOOM', () => openDoom()), btn('Minesweeper', () => openMinesweeper()), back()]),
+    linkedin: () => view('Zach posts about AI adoption, marketing technology and the things he builds. His profile has the latest posts.', null, [
+      btn('Open LinkedIn profile', () => { openUrl(LI(), 'LinkedIn'); thanks(); }), back()])
+  })[name]();
   const thanks = () => {
     setFace('disky_wave');
-    say.textContent = "Great choice! Zach's profile is opening in a new tab. Come back anytime. I'll be here.";
-    row.replaceChildren(h('button', { class:'b', on:{ click: bye } }, 'OK'));
-    byeT = setTimeout(bye, 6000);
+    view("Great choice! Zach's profile is opening in a new tab. Come back anytime. I'll be here.", null, [btn('OK', bye)]);
+    byeT = setTimeout(bye, 7000);
   };
+  el._go = go;
   face.addEventListener('click', () => { bubble.classList.toggle('gone'); setFace(bubble.classList.contains('gone') ? 'disky' : 'disky_wave'); });
-  blinkT = setInterval(() => { if (!el.isConnected) return; setFace('disky_blink'); setTimeout(() => setFace(bubble.classList.contains('gone') ? 'disky' : 'disky'), 140); }, 3600);
+  const blinkT = setInterval(() => { if (!el.isConnected) return; setFace('disky_blink'); setTimeout(() => setFace('disky'), 140); }, 3600);
   document.body.append(el);
-  ask();
+  go(start || 'ask');
   setFace('disky_wave'); setTimeout(() => setFace('disky'), 1800);
 }
 
