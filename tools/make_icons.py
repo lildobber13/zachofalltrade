@@ -610,6 +610,83 @@ def disky16():
     c.outline(); return c
 S16['disky'] = disky16()
 
+# ---- Disky costumes (40x40 sprite sheet) --------------------------------
+def disky40(base):
+    c = Canvas(40)
+    for y, row in enumerate(base.p):
+        for x, v in enumerate(row):
+            if v != '.': c.set(x + 3, y + 6, v)
+    return c
+def bare(blink=False, wave=False):
+    b = Canvas(); 
+    # draw the plain disk without arms outline so costumes can add their own
+    src = disky(blink=blink, wave=wave)
+    return disky40(src)
+def finish(c): c.outline(); return c
+def cos_doom(flash):
+    c = disky40(disky())
+    c.rect(8, 19, 22, 2, 'R'); c.rect(8, 19, 22, 1, 'r') if False else None
+    c.rect(8, 21, 22, 1, 'r')
+    c.rect(30, 19, 3, 2, 'R')
+    if flash: poly(c, [(32,19),(38,15),(37,19)], 'R'); poly(c, [(32,20),(38,22),(36,24)], 'R')
+    else:     poly(c, [(32,19),(38,17),(38,20)], 'R'); poly(c, [(32,20),(37,24),(35,25)], 'R')
+    c.rect(11, 21, 3, 1, 'K'); c.rect(21, 21, 3, 1, 'K')  # angry brows over the band
+    # minigun: ammo belt, housing, spinning barrels
+    for i, x in enumerate(range(15, 24)): c.set(x, 33 - (i % 2), 'Y')
+    c.rect(22, 28, 9, 6, 'G'); c.rect(22, 28, 9, 1, 'g'); c.rect(22, 33, 9, 1, 'K'); c.rect(24, 30, 5, 2, 'K')
+    for y in (29, 31, 33): c.rect(31, y, 7, 1, 'g'); c.rect(31, y + 1, 7, 1, 'G')
+    c.rect(37, 29, 2, 6, 'K')
+    c.rect(28, 25, 2, 4, 'K'); c.rect(19, 30, 3, 2, 'K')  # hands
+    if flash:
+        poly(c, [(38,28),(40,26),(40,36),(38,35)], 'Y'); c.rect(38, 30, 2, 4, 'W')
+    return finish(c)
+def cos_mines():
+    c = disky40(disky())
+    c.rect(9, 6, 20, 5, 'Y'); c.rect(10, 5, 18, 1, 'Y'); c.rect(7, 10, 24, 2, 'y'); c.rect(7, 10, 24, 1, 'Y')
+    c.rect(17, 5, 4, 4, 'W'); c.rect(18, 6, 2, 2, 'C')
+    c.rect(33, 21, 1, 13, 'K'); poly(c, [(34,21),(39,23.5),(34,26)], 'R')
+    return finish(c)
+def cos_resume():
+    c = disky40(disky())
+    for x0 in (13, 20):
+        c.rect(x0, 22, 6, 1, 'K'); c.rect(x0, 27, 6, 1, 'K'); c.rect(x0, 22, 1, 6, 'K'); c.rect(x0 + 5, 22, 1, 6, 'K')
+    c.rect(19, 24, 1, 1, 'K')
+    c.rect(32, 24, 7, 10, 'W'); c.rect(32, 24, 7, 1, 'G'); c.rect(34, 22, 3, 3, 'G')
+    for y in (27, 29, 31): c.rect(33, y, 5, 1, 'b')
+    c.rect(29, 28, 3, 2, 'K')
+    poly(c, [(18,33),(21,33),(20,35),(19,35)], 'R')
+    return finish(c)
+def cos_explorer():
+    c = disky40(disky())
+    c.rect(10, 5, 18, 5, 'k'); c.rect(12, 3, 14, 2, 'k'); c.rect(7, 10, 24, 2, 'k'); c.rect(7, 11, 24, 1, 'y'); c.rect(10, 9, 18, 1, 'n')
+    c.rect(32, 26, 3, 5, 'K'); c.rect(36, 26, 3, 5, 'K'); c.rect(34, 28, 2, 1, 'K'); c.rect(29, 28, 3, 2, 'K')
+    c.set(33, 27, 'C'); c.set(37, 27, 'C')
+    return finish(c)
+def cos_dos():
+    c = disky40(disky())
+    c.rect(6, 6, 26, 6, 's'); c.rect(8, 4, 22, 2, 's'); c.rect(6, 12, 3, 20, 's'); c.rect(29, 12, 3, 20, 's')
+    c.rect(11, 22, 14, 5, 'K'); c.rect(12, 23, 5, 3, 'L'); c.rect(19, 23, 5, 3, 'L')
+    c.set(13, 23, 'W'); c.set(20, 23, 'W')
+    return finish(c)
+def cos_browser():
+    c = disky40(disky())
+    c.rect(11, 22, 7, 5, 'K'); c.rect(20, 22, 7, 5, 'K'); c.rect(18, 23, 2, 1, 'K'); c.rect(10, 23, 1, 1, 'K')
+    c.rect(12, 23, 2, 1, 'C'); c.rect(21, 23, 2, 1, 'C')
+    c.disc(35, 29, 3, 'B'); c.rect(34, 27, 2, 2, 'e')
+    return finish(c)
+def cos_notepad():
+    c = disky40(disky())
+    c.rect(11, 8, 18, 3, 'R'); c.rect(14, 6, 12, 2, 'R'); c.rect(7, 10, 26, 1, 'r')
+    poly(c, [(32,30),(36,22),(38,23),(33,32)], 'Y'); poly(c, [(32,30),(33,32),(31,32)], 'n'); c.rect(36, 21, 3, 2, 'R')
+    c.rect(29, 28, 3, 2, 'K')
+    return finish(c)
+for n, f in (('c_doom', lambda: cos_doom(False)), ('c_doom2', lambda: cos_doom(True)), ('c_mines', cos_mines), ('c_resume', cos_resume),
+             ('c_explorer', cos_explorer), ('c_dos', cos_dos), ('c_browser', cos_browser), ('c_notepad', cos_notepad)):
+    icons[n] = f()
+icons['c_default'] = finish(disky40(disky()))
+icons['c_default_blink'] = finish(disky40(disky(blink=True)))
+icons['c_default_wave'] = finish(disky40(disky(wave=True)))
+
 pix32 = {k: v.rows() for k, v in icons.items()}
 pix16 = {k: v.rows() for k, v in S16.items()}
 
@@ -623,7 +700,7 @@ glyphs = {
 js = 'const PIX32 = ' + json.dumps(pix32, separators=(',', ':')) + ';\nconst PIX16 = ' + json.dumps(pix16, separators=(',', ':')) + ';\nconst GLYPHS = ' + json.dumps(glyphs, separators=(',', ':')) + ';\n'
 open('/home/claude/zachofalltrade/tools/icons.js', 'w').write(js)
 
-PAL = {'K':'#000000','W':'#ffffff','g':'#c0c0c0','G':'#808080','l':'#dfdfdf','R':'#ff0000','r':'#800000','Y':'#ffff00','y':'#808000','L':'#00ff00','e':'#008000','C':'#00ffff','t':'#008080','B':'#0000ff','b':'#000080','M':'#ff00ff','p':'#800080'}
+PAL = {'k':'#d8c078','n':'#804000','o':'#ff8000','s':'#404040','K':'#000000','W':'#ffffff','g':'#c0c0c0','G':'#808080','l':'#dfdfdf','R':'#ff0000','r':'#800000','Y':'#ffff00','y':'#808000','L':'#00ff00','e':'#008000','C':'#00ffff','t':'#008080','B':'#0000ff','b':'#000080','M':'#ff00ff','p':'#800080'}
 def svg(rows, z):
     n = len(rows); parts = []
     for y, row in enumerate(rows):
