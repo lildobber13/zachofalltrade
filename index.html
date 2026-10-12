@@ -69,6 +69,17 @@ button.b:focus-visible{outline:0.0625rem dotted #000;outline-offset:-0.3125rem}
 .item.sel .lbl,.item:focus-visible .lbl{background:#000080;color:#fff;outline:0.0625rem dotted #ff0}
 .status{padding:0.125rem 0.375rem;flex:none;margin-top:0.125rem}
 
+.urlbox{border:0.0625rem solid;border-color:#808080 #fff #fff #808080;box-shadow:inset 0.0625rem 0.0625rem #000;font:inherit;color:#000;-webkit-user-select:text;user-select:text;outline:0}
+.webpage{flex:1;min-height:0;overflow:auto;background:#fff;color:#000;-webkit-user-select:text;user-select:text}
+.wp{padding:1rem 1.25rem;max-width:46rem;font:0.8125rem/1.45 Arial,Helvetica,sans-serif}
+.wp h1{font:bold 1.5rem Arial,sans-serif;margin:0 0 0.5rem}.wp h2{font:bold 1.125rem Arial,sans-serif;margin:1.25rem 0 0.5rem;border-bottom:0.0625rem solid #ccc;padding-bottom:0.25rem}
+.wp a{color:#0000ee}.wp a:visited{color:#551a8b}.wp.err h1{color:#000}.wp hr{border:0;border-top:0.0625rem solid #808080}
+.wp .brow{justify-content:flex-start;display:flex;gap:0.5rem;margin-top:0.75rem;flex-wrap:wrap}
+.ghhead{display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap}.ghav{width:8rem;height:8rem;border:0.0625rem solid #808080;background:#eee}
+.ghlogin{color:#555;font-size:1rem;margin-bottom:0.25rem}.ghmeta{color:#555;margin-top:0.25rem}.ghdesc{margin-top:0.125rem}
+.ghrepo{border:0.0625rem solid #ccc;padding:0.5rem 0.625rem;margin:0.375rem 0}.ghrepo a{font-weight:bold}
+.ghdot{display:inline-block;width:0.625rem;height:0.625rem;border-radius:50%;margin-right:0.25rem;vertical-align:middle}
+
 /* notepad / dos */
 .pad{flex:1;resize:none;border:0;outline:0;margin:0;padding:0.25rem;background:#fff;color:#000;font:0.8125rem/1.3 "Courier New",monospace;-webkit-user-select:text;user-select:text;overflow:auto;white-space:pre-wrap}
 .dos{flex:1;background:#000;color:#c0c0c0;font:0.875rem/1.25 "Courier New",monospace;padding:0.25rem;overflow:auto;white-space:pre-wrap;word-break:break-all;-webkit-user-select:text;user-select:text;cursor:text}
@@ -193,6 +204,7 @@ input[type=radio]:checked{background-size:0.25rem 0.25rem;background-image:url("
 const CONFIG = {
   ownerName: 'Zach',
   siteName: 'Zach of All Trades',
+  githubUser: 'lildobber13',
 
   // Each app becomes a folder inside Applications, with a Launch .exe inside it.
   // Double-clicking the .exe opens `url` in a new tab.
@@ -538,6 +550,128 @@ function openPdf(name, node){
   return win;
 }
 
+/* =====================================================================
+   web browser (GitHub blocks iframes, so the profile is drawn from GitHub's public API)
+   ===================================================================== */
+function openBrowser(start){
+  const HOME = 'about:home', GHUSER = CONFIG.githubUser, GH = 'https://github.com/' + GHUSER;
+  let hist = [], pos = -1, win, cache = null;
+  const addr = h('input', { class:'addr urlbox', type:'text', spellcheck:'false', autocapitalize:'off' });
+  const page = h('div', { class:'webpage' });
+  const stat = h('div', { class:'status', text:'Done' });
+  const bBack = h('button', { class:'b', on:{ click: () => step(-1) } }, '← Back');
+  const bFwd = h('button', { class:'b', on:{ click: () => step(1) } }, 'Forward →');
+  const bRef = h('button', { class:'b', on:{ click: () => { cache = null; show(hist[pos]); } } }, 'Refresh');
+  const bHome = h('button', { class:'b', on:{ click: () => nav(HOME) } }, 'Home');
+  const link = (label, url) => h('button', { class:'b', on:{ click: () => nav(url) } }, label);
+
+  const norm = v => {
+    v = (v || '').trim();
+    if (!v || /^(home|about:home)$/i.test(v)) return HOME;
+    const m = v.match(/^(?:https?:\/\/)?(?:www\.)?github\.com\/([^\/?#]+)\/?$/i);
+    if (m && m[1].toLowerCase() === GHUSER.toLowerCase()) return GH;
+    if (/^https?:\/\//i.test(v) || /^[\w-]+(\.[\w-]+)+(\/|$)/.test(v)) return /^https?:\/\//i.test(v) ? v : 'https://' + v;
+    return v;
+  };
+  const sync = () => { addr.value = hist[pos] || ''; bBack.disabled = pos <= 0; bFwd.disabled = pos >= hist.length - 1; };
+  const titleFor = u => u === HOME ? 'Welcome' : u === GH ? GHUSER + ' (GitHub)' : 'Page cannot be displayed';
+  function nav(v){
+    const u = norm(v);
+    hist = hist.slice(0, pos + 1); hist.push(u); pos = hist.length - 1; show(u);
+  }
+  function step(d){ const p = pos + d; if (p < 0 || p >= hist.length) return; pos = p; show(hist[pos]); }
+  function show(u){
+    sync(); page.scrollTop = 0; page.replaceChildren();
+    win.setTitle && win.setTitle(titleFor(u) + ' - Web Browser');
+    if (u === HOME) return home();
+    if (u === GH) return profile();
+    return fail(u);
+  }
+  function home(){
+    stat.textContent = 'Done';
+    page.append(h('div', { class:'wp home' },
+      h('h1', { text:'Welcome to the Web' }),
+      h('p', { text:'This is a tiny browser built into ZachOS 95. Most sites refuse to be shown inside other pages, so it can only render a few places.' }),
+      h('h2', { text:'Links' }),
+      h('ul', {},
+        h('li', {}, h('a', { href:'#', on:{ click: e => { e.preventDefault(); nav(GH); } } }, 'My GitHub profile (' + GHUSER + ')')),
+        ...CONFIG.apps.map(a => h('li', {}, h('a', { href:'#', on:{ click: e => { e.preventDefault(); launchApp(a); } } }, a.name), ' - opens in a new tab')))));
+  }
+  function fail(u){
+    stat.textContent = 'Done';
+    const real = /^https?:\/\//i.test(u);
+    page.append(h('div', { class:'wp err' },
+      h('h1', { text:'The page cannot be displayed' }),
+      h('p', { text:'The page you are looking for is currently unavailable in this browser. Most websites do not allow themselves to be shown inside another page.' }),
+      h('hr'),
+      h('p', { text:'Please try the following:' }),
+      h('ul', {}, h('li', { text:'Open the address in a real browser tab.' }), h('li', { text:'Go back to the home page or to my GitHub profile.' })),
+      h('div', { class:'brow' },
+        real ? h('button', { class:'b', on:{ click: () => openUrl(u, u) } }, 'Open in new tab') : null,
+        h('button', { class:'b', on:{ click: () => nav(HOME) } }, 'Home'),
+        h('button', { class:'b', on:{ click: () => nav(GH) } }, 'GitHub profile'))));
+  }
+  const ago = s => { const d = Math.round((Date.now() - new Date(s)) / 864e5); return d < 1 ? 'today' : d < 31 ? d + ' days ago' : d < 365 ? Math.round(d / 30) + ' months ago' : Math.round(d / 365) + ' years ago'; };
+  const LANG = { JavaScript:'#f1e05a', TypeScript:'#3178c6', Python:'#3572a5', HTML:'#e34c26', CSS:'#563d7c', Shell:'#89e051', Swift:'#f05138', Go:'#00add8', Rust:'#dea584', C:'#555555', 'C++':'#f34b7d', Java:'#b07219' };
+  function profile(){
+    stat.textContent = 'Connecting to github.com...';
+    const out = h('div', { class:'wp gh' }, h('p', { text:'Loading ' + GH + ' ...' }));
+    page.append(out);
+    const get = cache ? Promise.resolve(cache) : Promise.all([
+      fetch('https://api.github.com/users/' + GHUSER).then(r => { if (!r.ok) throw 0; return r.json(); }),
+      fetch('https://api.github.com/users/' + GHUSER + '/repos?per_page=100&sort=updated').then(r => { if (!r.ok) throw 0; return r.json(); })
+    ]);
+    get.then(([u, repos]) => {
+      cache = [u, repos];
+      if (!page.contains(out)) return;
+      repos = repos.filter(r => !r.fork).slice(0, 30);
+      const stats = [u.followers + ' followers', u.following + ' following', u.public_repos + ' repositories'].join('  ·  ');
+      out.replaceChildren(
+        h('div', { class:'ghhead' },
+          h('img', { class:'ghav', src:u.avatar_url + (u.avatar_url.indexOf('?') > -1 ? '&' : '?') + 's=200', alt:'' }),
+          h('div', {},
+            h('h1', { text:u.name || u.login }),
+            h('div', { class:'ghlogin', text:u.login }),
+            u.bio ? h('p', { text:u.bio }) : null,
+            h('div', { class:'ghmeta', text:[u.location, u.company].filter(Boolean).join('  ·  ') }),
+            h('div', { class:'ghmeta', text:stats }),
+            h('div', { class:'brow' }, h('button', { class:'b', on:{ click: () => openUrl(GH, 'GitHub') } }, 'Open on GitHub')))),
+        h('h2', { text:'Repositories' }),
+        ...repos.map(r => h('div', { class:'ghrepo' },
+          h('a', { href:r.html_url, target:'_blank', rel:'noopener', text:r.name }),
+          h('div', { class:'ghdesc', text:r.description || '' }),
+          h('div', { class:'ghmeta' },
+            r.language ? h('span', {}, h('i', { class:'ghdot', style:'background:' + (LANG[r.language] || '#888') }), r.language + '   ') : null,
+            r.stargazers_count ? '★ ' + r.stargazers_count + '   ' : '',
+            'Updated ' + ago(r.pushed_at || r.updated_at)))));
+      stat.textContent = 'Done';
+    }).catch(() => {
+      if (!page.contains(out)) return;
+      out.replaceChildren(h('h1', { text:'Could not reach GitHub' }),
+        h('p', { text:'GitHub did not answer (it may be rate limiting or you may be offline).' }),
+        h('div', { class:'brow' }, h('button', { class:'b', on:{ click: () => openUrl(GH, 'GitHub') } }, 'Open on GitHub'), h('button', { class:'b', on:{ click: () => show(GH) } }, 'Try again')));
+      stat.textContent = 'Done';
+    });
+  }
+
+  addr.addEventListener('keydown', e => { if (e.key === 'Enter') nav(addr.value); e.stopPropagation(); });
+  const mb = menubar([
+    { label:'File', items:[ { label:'Open in New Tab', run: () => { const u = hist[pos]; if (/^https?:/.test(u)) openUrl(u, u); } }, '-', { label:'Close', run: () => closeWin(win) } ] },
+    { label:'Go', items:[ { label:'Back', run: () => step(-1) }, { label:'Forward', run: () => step(1) }, { label:'Home Page', run: () => nav(HOME) } ] },
+    { label:'Favorites', items:[ { label:GHUSER + ' on GitHub', run: () => nav(GH) } ] },
+    { label:'Help', items:[ { label:'About', run: () => msgBox({ title:'About Web Browser', icon:'info', text:'Web Browser for ZachOS 95.\nIt only knows how to show a few pages.' }) } ] }
+  ]);
+  const content = h('div', { style:'display:flex;flex-direction:column;flex:1;min-height:0' },
+    h('div', { class:'tool' }, bBack, bFwd, bRef, bHome),
+    h('div', { class:'tool' }, h('span', { text:'Address' }), addr, h('button', { class:'b', on:{ click: () => nav(addr.value) } }, 'Go')),
+    h('div', { class:'tool' }, h('span', { text:'Links' }), link('Home', HOME), link(GHUSER + ' on GitHub', GH)),
+    h('div', { class:'sunken', style:'flex:1;min-height:0;display:flex;flex-direction:column' }, page),
+    stat);
+  win = createWindow({ key:'browser', title:'Welcome - Web Browser', icon:'globe', w:Math.min(780, Math.floor(innerWidth / window.__S) - 20), h:Math.min(580, Math.floor(innerHeight / window.__S) - 70), menu:mb, content });
+  nav(start || HOME);
+  return win;
+}
+
 function addrOf(tree, path){
   if (tree === 'bin') return 'Recycle Bin';
   if (!path.length) return 'My Computer';
@@ -813,6 +947,8 @@ function openRun(){
     if (app) return launchApp(app);
     if (/^https?:\/\//.test(lc)) return openUrl(v, v);
     if (lc === 'notepad') return openNotepad('Untitled', '');
+    if (lc === 'browser' || lc === 'iexplore' || lc === 'iexplore.exe') return openBrowser();
+    if (/^(?:https?:\/\/)?(?:www\.)?github\.com\//i.test(lc)) return openBrowser(v);
     if (lc === 'cmd' || lc === 'command' || lc === 'command.com') return openDos();
     if (lc === 'winmine' || lc === 'minesweeper') return openMinesweeper();
     if (lc === 'explorer' || lc === 'c:' || lc === 'c:\\') return openExplorer('computer', [], 'exp:c');
@@ -876,7 +1012,8 @@ const programs = {
   dos: openDos,
   minesweeper: openMinesweeper,
   explorer: () => openExplorer('computer', [], 'exp:c'),
-  system: openSystem
+  system: openSystem,
+  browser: () => openBrowser()
 };
 
 /* =====================================================================
@@ -899,6 +1036,7 @@ This is the portfolio of Zach of All Trades.
 
 Best viewed at 800x600 in a browser from the late nineties. Anything newer is fine too.`) },
   { name:'MS-DOS Prompt', icon:'dos', open: openDos },
+  { name:'Web Browser', icon:'globe', open: () => openBrowser() },
   { name:'Minesweeper', icon:'mine', open: openMinesweeper },
   { name:'Recycle Bin', icon:'bin', open: () => openExplorer('bin', [], 'exp:bin') }
 ];
@@ -934,6 +1072,7 @@ function appItems(){ return CONFIG.apps.map(a => ({ label:a.name, icon:a.icon ||
 const menuItems = [
   { label:'Programs', icon:'folder', sub:[
     { label:'Applications', icon:'folder', sub: appItems().length ? appItems() : [{ label:'(Empty)', icon:'folder', run: () => {} }] },
+    { label:'Web Browser', icon:'globe', run: programs.browser },
     { label:'Accessories', icon:'folder', sub:[
       { label:'Notepad', icon:'text', run: programs.notepad },
       { label:'MS-DOS Prompt', icon:'dos', run: programs.dos },
