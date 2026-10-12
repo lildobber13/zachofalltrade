@@ -14,11 +14,8 @@ Each app appears as a folder in Applications (and in Start > Programs > Applicat
 ## Documents
 `CONFIG.documents` holds the text files in My Documents. Set `CONFIG.resumePdfUrl` (for example `/resume.pdf`) to add a real Resume.pdf, and use `CONFIG.links` for LinkedIn, GitHub and similar shortcuts. The About Me and Resume text shipped here is placeholder copy built from a few basics. Edit it.
 
-## The /apps/... URLs
-Your apps live on Lovable, so `/apps/neverendingbacklog` on zachofalltrade.com has to forward to each app's Lovable address. Two options:
-
-1. Point `url` straight at the Lovable address (simplest, always works).
-2. Keep the pretty path and add a redirect at your host. Netlify and Cloudflare Pages read the `_redirects` file included here. Use a 302 redirect rather than a rewrite, because proxying a single page app under a sub path usually breaks its asset links.
+## The /apps/... URLs (GitHub Pages)
+Each app has a small redirect page at `apps/<id>/index.html` that forwards to its Lovable address, so `zachofalltrade.com/apps/<id>` works on GitHub Pages. To add an app, add an entry to `CONFIG.apps` and create a matching redirect page (copy any existing one and change the target). To point an app at a custom domain later, change the target in its redirect page.
 
 ## Easter eggs
 Spoilers: Konami code, `idkfa`, `xyzzy`, hidden commands in the DOS prompt (`help`, `coffee`, `sudo`), a Recycle Bin worth browsing, Minesweeper, and a starfield screen saver after two idle minutes (or right-click the desktop). Add `?noboot` to the URL to skip the boot sequence.
