@@ -1391,7 +1391,7 @@ function ensureDisky(){
   const hilite = sel => { clearHl(); if (!sel) return; const f = typeof sel === 'function' ? sel() : $(sel); if (f){ f.classList.add('dhl'); hlEl = f; } };
   const showB = () => { clearTimeout(hideT); bubble.classList.remove('gone'); };
   const hideB = () => { bubble.classList.add('gone'); };
-  const closePanel = () => { panel = false; clearHl(); clearTimeout(byeT); if (!hovering) hideB(); else quipNow(); };
+  const closePanel = () => { panel = false; clearHl(); clearTimeout(byeT); hideB(); };
   const quipNow = () => { if (panel) return; say.textContent = DCOS[cos].quip; list.replaceChildren(); row.replaceChildren(); showB(); };
   const quip = ms => { if (panel || el.classList.contains('hide')) return; quipNow(); clearTimeout(qT); qT = setTimeout(() => { if (!panel && !hovering) hideB(); }, ms || 4200); };
   const setCostume = name => {
@@ -1458,8 +1458,13 @@ function ensureDisky(){
     linkedin: () => view('Zach posts about AI adoption, marketing technology and the things he builds. His profile has the latest posts.', null, [
       btn('Open LinkedIn profile', () => { openUrl(LI(), 'LinkedIn'); thanks(); }), back()])
   })[name]();
-  face.addEventListener('mouseenter', () => { hovering = true; clearTimeout(hideT); clearTimeout(qT); if (!panel) quipNow(); });
-  face.addEventListener('mouseleave', () => { hovering = false; if (!panel) hideT = setTimeout(hideB, 350); });
+  let intentT = null;
+  face.addEventListener('pointermove', e => {
+    if (hovering || e.pointerType === 'touch' || !(e.movementX || e.movementY)) return;
+    hovering = true; clearTimeout(hideT); clearTimeout(qT); clearTimeout(intentT);
+    intentT = setTimeout(() => { if (hovering && !panel) quipNow(); }, 350);
+  });
+  face.addEventListener('pointerleave', () => { hovering = false; clearTimeout(intentT); if (!panel) hideT = setTimeout(hideB, 300); });
   face.addEventListener('click', () => { if (panel) closePanel(); else go('menu'); });
   face.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); face.click(); } });
   el._go = go; el._panel = () => panel; el._cos = setCostume;
