@@ -1399,7 +1399,7 @@ function ensureDisky(){
     frames = d.f; fi = 0; clearInterval(ftimer);
     if (frames.length > 1) ftimer = setInterval(() => { fi++; draw(); }, d.ms || 250);
     face.classList.toggle('shake', !!d.shake); draw();
-    if (!first){ face.classList.remove('pop'); void face.offsetWidth; face.classList.add('pop'); setTimeout(() => face.classList.remove('pop'), 500); quip(4200); }
+    if (!first){ face.classList.remove('pop'); void face.offsetWidth; face.classList.add('pop'); setTimeout(() => face.classList.remove('pop'), 500); }
   };
   const btn = (label, fn) => h('button', { class:'b', on:{ click: fn } }, label);
   const LI = () => (CONFIG.links.find(l => l.name === 'LinkedIn') || {}).url;
