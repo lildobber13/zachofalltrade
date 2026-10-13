@@ -199,11 +199,28 @@ button.b:focus-visible{outline:0.0625rem dotted #000;outline-offset:-0.3125rem}
 
 /* overlays */
 #boot{position:fixed;inset:0;background:#000;color:#c0c0c0;font:1rem/1.35 "Courier New",monospace;z-index:300000;padding:1rem;display:none;overflow:hidden;white-space:pre-wrap}
-.splash{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(#0a2a8a,#2a8ad0 70%,#7fd0e8);color:#fff;text-align:center}
-.splash h1{font:italic bold 3.25rem Arial,sans-serif;text-shadow:0.1875rem 0.1875rem #000;margin:0}
-.splash p{margin:0.5rem 0 0;font:0.9375rem Arial,sans-serif;text-shadow:0.0625rem 0.0625rem #000}
-.pbar{width:15rem;height:1rem;border:0.125rem solid #fff;overflow:hidden;margin-top:2.125rem;background:rgba(0,0,0,.35)}
-.pbar i{display:block;width:4.375rem;height:100%;background:repeating-linear-gradient(90deg,#00f 0 0.5rem,transparent 0.5rem 0.625rem);animation:slide 1.2s linear infinite}
+.splash{position:absolute;inset:0;overflow:hidden;color:#fff;background:linear-gradient(#3f86c8 0%,#6fa8dc 45%,#b9dbf3 100%)}
+.splash .cl{position:absolute;left:0;right:0;background-repeat:repeat-x;filter:blur(0.25rem)}
+.splash .c1{top:-5%;height:55%;opacity:.95;background-image:radial-gradient(ellipse 22% 38% at 20% 40%,#fff 0,rgba(255,255,255,0) 100%),radial-gradient(ellipse 18% 30% at 52% 55%,#fff 0,rgba(255,255,255,0) 100%),radial-gradient(ellipse 24% 34% at 82% 35%,#fff 0,rgba(255,255,255,0) 100%);background-size:90rem 100%;animation:vcloud1 70s linear infinite}
+.splash .c2{top:30%;height:60%;opacity:.8;background-image:radial-gradient(ellipse 20% 28% at 12% 50%,#fff 0,rgba(255,255,255,0) 100%),radial-gradient(ellipse 26% 32% at 45% 40%,#eaf4ff 0,rgba(255,255,255,0) 100%),radial-gradient(ellipse 18% 26% at 78% 55%,#fff 0,rgba(255,255,255,0) 100%);background-size:70rem 100%;animation:vcloud2 45s linear infinite}
+.splash .c3{top:55%;height:50%;opacity:.7;background-image:radial-gradient(ellipse 25% 30% at 30% 50%,#fff 0,rgba(255,255,255,0) 100%),radial-gradient(ellipse 20% 26% at 70% 45%,#fff 0,rgba(255,255,255,0) 100%);background-size:55rem 100%;animation:vcloud3 28s linear infinite}
+.splash .brand{position:absolute;left:0;right:0;top:0;bottom:2.5rem;display:flex;align-items:center;justify-content:center;gap:1.5rem;flex-wrap:wrap;padding:0 1rem}
+.splash .vlogo{animation:vfloat 3s ease-in-out infinite;filter:drop-shadow(0.5rem 0.75rem 0.25rem rgba(0,30,80,.35))}
+.splash .vtxt{text-align:left}
+.splash .sm{font:1.25rem Arial,sans-serif;letter-spacing:0.0625rem;color:#fff;text-shadow:0.0625rem 0.0625rem 0.125rem rgba(0,30,80,.5)}
+.splash h1{font:900 3.75rem/1 Arial,sans-serif;margin:0;color:#000;letter-spacing:-0.1875rem;text-shadow:0.0625rem 0.0625rem 0 rgba(255,255,255,.3)}
+.splash h1 span{font-weight:400;color:#fff;letter-spacing:0;margin-left:0.25rem;text-shadow:0.0625rem 0.0625rem 0.125rem rgba(0,30,80,.4)}
+.splash .vstat{position:absolute;left:0;right:0;bottom:3rem;text-align:center;font:0.75rem Arial,sans-serif;color:#fff;text-shadow:0.0625rem 0.0625rem 0.125rem rgba(0,30,80,.7)}
+.splash .vbar{position:absolute;left:0;right:0;bottom:0;height:1.5rem;background:rgba(40,90,160,.35)}
+.splash .vbar i{display:block;height:100%;width:0;background:repeating-linear-gradient(90deg,#3d78c0 0 2rem,#6f9fd6 2rem 4rem,#9ebfe4 4rem 6rem,#5d8fcc 6rem 8rem);background-size:8rem 100%;animation:vslide 1.2s linear infinite;transition:width .12s linear}
+@keyframes vcloud1{to{background-position:-90rem 0}}
+@keyframes vcloud2{to{background-position:-70rem 0}}
+@keyframes vcloud3{to{background-position:-55rem 0}}
+@keyframes vslide{to{background-position:8rem 0}}
+@keyframes vfloat{50%{transform:translateY(-0.5rem) rotate(-2deg)}}
+#boot.fade{transition:opacity .45s;opacity:0}
+@media (max-width:30rem){.splash h1{font-size:2.6rem}.splash .brand{flex-direction:column;gap:0.5rem}.splash .vtxt{text-align:center}}
+@media (prefers-reduced-motion:reduce){.splash,.splash *{animation:none !important}}
 @keyframes slide{from{transform:translateX(-4.375rem)}to{transform:translateX(15rem)}}
 #bsod{position:fixed;inset:0;background:#0000aa;color:#fff;font:1rem/1.3 "Courier New",monospace;z-index:200000;padding:6vh 6vw;white-space:pre-wrap;overflow:auto}
 #bsod b{background:#aaa;color:#0000aa;padding:0 0.5rem}
@@ -1604,16 +1621,34 @@ function boot(){
     ];
     let done = false; const timers = [];
     const finish = () => {
-      if (done) return; done = true; timers.forEach(clearTimeout);
+      if (done) return; done = true; timers.forEach(clearTimeout); clearInterval(prog);
       try { sessionStorage.setItem('zoat_booted', '1'); } catch (e) {}
-      document.removeEventListener('keydown', finish); b.remove(); resolve();
+      document.removeEventListener('keydown', finish);
+      b.classList.add('fade'); setTimeout(() => { b.remove(); resolve(); }, 450);
     };
-    lines.forEach((l, i) => timers.push(setTimeout(() => { b.append(l + '\n'); }, 160 + i * 130)));
+    let prog = null;
+    lines.forEach((l, i) => timers.push(setTimeout(() => { b.append(l + '\n'); }, 160 + i * 100)));
+    const splashAt = 160 + lines.length * 100 + 250;
     timers.push(setTimeout(() => {
       b.textContent = '';
-      b.append(h('div', { class:'splash' }, h('h1', { text:'ZachOS 95' }), h('p', { text:'Starting up...' }), h('div', { class:'pbar' }, h('i'))));
-    }, 160 + lines.length * 130 + 300));
-    timers.push(setTimeout(finish, 160 + lines.length * 130 + 2300));
+      const fill = h('i'), stat = h('div', { class:'vstat', text:'' });
+      const msgs = [[0, 'Loading personality.dll'], [14, 'Mounting Hard Drive of Many Hats'], [32, 'Reticulating splines'], [50, 'Polishing the pixels'], [68, 'Teaching Disky to wave'], [86, 'Warming up the desktop'], [97, 'Welcome']];
+      b.append(h('div', { class:'splash' },
+        h('div', { class:'cl c1' }), h('div', { class:'cl c2' }), h('div', { class:'cl c3' }),
+        h('div', { class:'brand' },
+          h('div', { class:'vlogo', html:svg('logo', 120) }),
+          h('div', { class:'vtxt' },
+            h('div', { class:'sm', text:'Zach of All Trade' }),
+            h('h1', { html:'ZachOS<span>95</span>' }))),
+        stat, h('div', { class:'vbar' }, fill)));
+      let p = 0;
+      prog = setInterval(() => {
+        p = Math.min(100, p + (Math.random() < .25 ? 0.5 : 2 + Math.random() * 3.5));
+        fill.style.width = Math.floor(p / 100 * 28) / 28 * 100 + '%';
+        let m = msgs[0][1]; msgs.forEach(x => { if (p >= x[0]) m = x[1]; }); stat.textContent = m + (p < 97 ? '...' : '');
+        if (p >= 100){ clearInterval(prog); timers.push(setTimeout(finish, 450)); }
+      }, 110);
+    }, splashAt));
     b.addEventListener('pointerdown', finish); document.addEventListener('keydown', finish);
   });
 }
