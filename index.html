@@ -178,10 +178,19 @@ button.b:focus-visible{outline:0.0625rem dotted #000;outline-offset:-0.3125rem}
 .sm li.open>.sm{display:block}
 .sm .sm.left{left:auto;right:100%}
 @media (max-width:640px){
-  .sm li{flex-wrap:wrap}
-  .sm .sm{width:auto;position:static;border:0;box-shadow:none;background:transparent;padding:0 0 0 1.125rem;flex-basis:100%}
+  #startmenu{max-width:calc(100vw - 0.25rem);max-height:calc(100vh - 3.5rem);overflow-y:auto;overflow-x:hidden}
+  .sm{min-width:0;flex:1;min-width:0}
+  .sm li{flex-wrap:wrap;padding-top:0.625rem;padding-bottom:0.625rem}
+  .sm li.top{padding-top:0.75rem;padding-bottom:0.75rem}
+  .sm li:hover,.sm li.open{background:#c0c0c0;color:#000}
+  .sm li:not(.arrow):active{background:#000080;color:#fff}
+  .sm li.arrow::after{order:1}
+  .sm li.arrow.open::after{content:'\25BC'}
+  .sm li.open>span{font-weight:bold}
+  .sm .sm{order:2;flex-basis:100%;width:auto;position:static;border:0;box-shadow:none;background:transparent;padding:0.25rem 0 0 1.25rem;margin-top:0.375rem;border-top:0.0625rem solid #808080}
   .sm li.open>.sm{display:block}
-  .sm .sm li{color:#000}
+  .sm .sm li{color:#000;background:transparent;padding-right:0.5rem}
+  .sm .sm li:not(.arrow):active{background:#000080;color:#fff}
 }
 .ctx{position:fixed;z-index:100002;padding:0.125rem;background:#c0c0c0;border:0.0625rem solid;border-color:#fff #000 #000 #fff;box-shadow:inset 0.0625rem 0.0625rem #dfdfdf,inset -0.0625rem -0.0625rem #808080,0.125rem 0.125rem 0 rgba(0,0,0,.35)}
 .balloon{position:fixed;right:0.5rem;bottom:2.25rem;max-width:16.875rem;background:#ffffe1;border:0.0625rem solid #000;padding:0.5rem 1.5rem 0.5rem 0.625rem;z-index:100001;box-shadow:0.125rem 0.125rem 0 rgba(0,0,0,.3);line-height:1.3}
@@ -1285,7 +1294,7 @@ function buildMenu(items, top){
     const li = h('li', { class:(top ? 'top ' : '')+(it.sub ? 'arrow' : '') }, ico(it.icon || 'folder', top ? 32 : 16), h('span', { text:it.label }));
     if (it.sub){
       li.append(buildMenu(it.sub, false));
-      li.addEventListener('click', e => { if (e.target.closest('.sm .sm') && e.target.closest('.sm .sm') !== li.querySelector(':scope>.sm')) return; e.stopPropagation(); if (COARSE) li.classList.toggle('open'); else { applySub(li.parentElement, li); } fitSub(li); });
+      li.addEventListener('click', e => { const own = li.querySelector(':scope>.sm'); if (own && own.contains(e.target)) return; e.stopPropagation(); if (COARSE) li.classList.toggle('open'); else { applySub(li.parentElement, li); } fitSub(li); });
     } else {
       li.addEventListener('click', e => { e.stopPropagation(); closeStart(); it.run(); });
     }
