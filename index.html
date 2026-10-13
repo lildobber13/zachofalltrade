@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Zach of All Trades</title>
-<meta name="description" content="Portfolio of Zach of All Trades, presented as a retro desktop. Apps, resume, and a few secrets.">
+<title>Zach of All Trade</title>
+<meta name="description" content="Portfolio of Zach of All Trade, presented as a retro desktop. Apps, resume, and a few secrets.">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
@@ -232,7 +232,7 @@ input[type=radio]:checked{background-size:0.25rem 0.25rem;background-image:url("
 </div>
 <div id="startmenu"></div>
 <div id="boot"></div>
-<noscript><div class="ns"><h1>Zach of All Trades</h1><p>This site is a retro desktop and needs JavaScript. Please enable it to explore the apps and documents.</p></div></noscript>
+<noscript><div class="ns"><h1>Zach of All Trade</h1><p>This site is a retro desktop and needs JavaScript. Please enable it to explore the apps and documents.</p></div></noscript>
 
 <script>
 (function(){
@@ -243,7 +243,7 @@ input[type=radio]:checked{background-size:0.25rem 0.25rem;background-image:url("
    ===================================================================== */
 const CONFIG = {
   ownerName: 'Zach',
-  siteName: 'Zach of All Trades',
+  siteName: 'Zach of All Trade',
   githubUser: 'lildobber13',
 
   // Each app becomes a folder inside Applications, with a Launch .exe inside it.
@@ -915,7 +915,7 @@ function openDos(){
   const print = t => { line.before(h('div', { text: t === '' ? '\u00A0' : t })); out.scrollTop = out.scrollHeight; };
   const lines = t => String(t).split('\n').forEach(print);
   const here = () => getNode('computer', cwd);
-  lines('ZachOS 95 [Version 4.00.95]\n(C) Copyright Zach of All Trades 1986-2026.\n\nType HELP for a list of commands.\n');
+  lines('ZachOS 95 [Version 4.00.95]\n(C) Copyright Zach of All Trade 1986-2026.\n\nType HELP for a list of commands.\n');
   out.append(line);
   const setPrompt = () => { pr.textContent = prompt(); };
   setPrompt();
@@ -979,7 +979,7 @@ function openDos(){
     doom(){ print('Loading DOOM...'); openDoom(); },
     xyzzy(){ print('Nothing happens.'); },
     coffee(){ print('Error 418: I am a teapot. Brewing anyway... done.'); },
-    about(){ lines('Zach of All Trades\nAI Adoption and Enablement Leader, IBM Consulting\nBuilds apps on the side. Collects retro hardware.'); }
+    about(){ lines('Zach of All Trade\nAI Adoption and Enablement Leader, IBM Consulting\nBuilds apps on the side. Collects retro hardware.'); }
   };
   cmds.ls = cmds.dir; cmds.chdir = cmds.cd; cmds.cat = cmds.type; cmds.more = cmds.type; cmds.open = cmds.start; cmds.run = cmds.start; cmds.clear = cmds.cls; cmds.rm = cmds.del; cmds.quit = cmds.exit;
   inp.addEventListener('keydown', e => {
@@ -1082,7 +1082,7 @@ function openSystem(){
       ico('computer', 32),
       h('div', {},
         h('h4', { text:'System:' }), h('p', { text:'ZachOS 95' }), h('p', { text:'4.00.95 (Build 1986)' }),
-        h('h4', { text:'Registered to:' }), h('p', { text:CONFIG.ownerName }), h('p', { text:'of All Trades' }),
+        h('h4', { text:'Registered to:' }), h('p', { text:CONFIG.ownerName }), h('p', { text:'of All Trade' }),
         h('h4', { text:'Computer:' }), h('p', { text:'Genuine Human(R) Brain' }), h('p', { text:'Caffeine powered' }), h('p', { text:'640 KB RAM (ought to be enough)' }))),
     h('div', { class:'brow', style:'padding:0.25rem 0' }, h('button', { class:'b', on:{ click: () => closeWin(w) } }, 'OK')));
   const w = createWindow({ key:'sys', title:'System Properties', icon:'computer', w:360, content, center:true, resizable:false, minimizable:false });
@@ -1254,7 +1254,7 @@ const desktopItems = [
   { name:'README.txt', icon:'text', open: () => openNotepad('README.txt',
 `Welcome to ZachOS 95.
 
-This is the portfolio of Zach of All Trades.
+This is the portfolio of Zach of All Trade.
 
   Applications   things I have built and host online
   My Documents   resume and other papers
@@ -1585,7 +1585,7 @@ function boot(){
     b.style.display = 'block';
     const lines = [
       'ZachOS BIOS v1.0, An Over-Caffeinated Production',
-      'Copyright (C) 1986-2026 Zach of All Trades, Inc.', '',
+      'Copyright (C) 1986-2026 Zach of All Trade, Inc.', '',
       'CPU: Pentium-ish 100 MHz',
       'Memory Test: 640K OK',
       'Detecting Primary Master ... Hard Drive of Many Hats',
