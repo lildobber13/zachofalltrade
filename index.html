@@ -111,6 +111,8 @@ button.b:focus-visible{outline:0.0625rem dotted #000;outline-offset:-0.3125rem}
 .wrow.sel{background:#000080;color:#fff}
 .wmode{display:flex;gap:0.375rem;align-items:center}.wmode select{font:inherit}
 
+.marq{position:fixed;z-index:99998;pointer-events:none;border:0.0625rem dotted #000;outline:0.0625rem dotted #fff;box-sizing:border-box}
+
 /* notepad / dos */
 .pad{flex:1;resize:none;border:0;outline:0;margin:0;padding:0.25rem;background:#fff;color:#000;font:0.8125rem/1.3 "Courier New",monospace;-webkit-user-select:text;user-select:text;overflow:auto;white-space:pre-wrap}
 .dos{flex:1;background:#000;color:#c0c0c0;font:0.875rem/1.25 "Courier New",monospace;padding:0.25rem;overflow:auto;white-space:pre-wrap;word-break:break-all;-webkit-user-select:text;user-select:text;cursor:text}
@@ -558,6 +560,38 @@ function bindOpen(el, open, select){
   el.addEventListener('keydown', e => { if (e.key === 'Enter') open(); });
 }
 
+/* rubber-band selection: click on empty space and drag to select several icons */
+function marquee(container, itemSel, bgOk, scope){
+  container.addEventListener('pointerdown', e => {
+    if (e.button !== 0 || e.pointerType === 'touch' || !bgOk(e.target)) return;
+    const cr = container.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY, add = e.ctrlKey || e.metaKey;
+    const base = new Set(add ? [...scope().querySelectorAll(itemSel + '.sel')] : []);
+    let box = null, moved = false;
+    if (!add) scope().querySelectorAll(itemSel + '.sel').forEach(i => i.classList.remove('sel'));
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    const move = ev => {
+      const x = clamp(ev.clientX, cr.left, cr.right), y = clamp(ev.clientY, cr.top, cr.bottom);
+      if (!moved && Math.abs(ev.clientX - sx) < 4 && Math.abs(ev.clientY - sy) < 4) return;
+      moved = true;
+      if (!box){ box = h('div', { class:'marq' }); document.body.append(box); }
+      const l = Math.min(sx, x), t = Math.min(sy, y), w = Math.abs(x - sx), hh = Math.abs(y - sy);
+      box.style.cssText = 'left:' + l + 'px;top:' + t + 'px;width:' + w + 'px;height:' + hh + 'px';
+      scope().querySelectorAll(itemSel).forEach(it => {
+        const r = it.getBoundingClientRect();
+        const hit = r.left < l + w && r.right > l && r.top < t + hh && r.bottom > t;
+        it.classList.toggle('sel', hit || base.has(it));
+      });
+    };
+    const up = () => { document.removeEventListener('pointermove', move, true); document.removeEventListener('pointerup', up, true); document.removeEventListener('pointercancel', up, true); if (box) box.remove(); };
+    document.addEventListener('pointermove', move, true); document.addEventListener('pointerup', up, true); document.addEventListener('pointercancel', up, true);
+  });
+}
+const pickOne = (scope, el, e) => {
+  if (e && (e.ctrlKey || e.metaKey)){ el.classList.toggle('sel'); return; }
+  scope.querySelectorAll('.sel').forEach(i => i.classList.remove('sel')); el.classList.add('sel');
+};
+
 function openNotepad(name, text){
   const ta = h('textarea', { class:'pad', spellcheck:'false' }); ta.value = text || '';
   let win;
@@ -842,7 +876,7 @@ function openExplorer(tree, path, key){
       const it = h('div', { class:'item', tabindex:'0', role:'button' }, ico(nodeIcon(n), 32), h('span', { class:'lbl', text:name }));
       bindOpen(it,
         () => { if (n.type === 'folder') go([...st.path, name]); else openNode(n, name, { tree, path: st.path }); },
-        () => { if (st.sel) st.sel.classList.remove('sel'); st.sel = it; it.classList.add('sel'); });
+        e => { st.sel = it; pickOne(list, it, e); });
       list.append(it);
     });
     addr.textContent = addrOf(tree, st.path);
@@ -852,7 +886,7 @@ function openExplorer(tree, path, key){
     win.setTitle(last);
     const ic = win.root.querySelector('.titlebar .ic'); if (ic) ic.innerHTML = svg(st.path.length ? (st.path.length === 1 && tree === 'computer' ? 'drive' : 'folder') : (tree === 'bin' ? 'bin' : 'computer'), 16);
   }
-  list.addEventListener('pointerdown', e => { if (e.target === list && st.sel){ st.sel.classList.remove('sel'); st.sel = null; } });
+  marquee(list, '.item', t => t === list, () => list);
   render();
   return win;
 }
@@ -1234,12 +1268,10 @@ const iconsEl = $('#icons');
 let selIcon = null;
 desktopItems.forEach(d => {
   const el = h('div', { class:'dicon', tabindex:'0', role:'button' }, ico(d.icon, 32), h('span', { class:'lbl', text:d.name }));
-  bindOpen(el, d.open, () => { if (selIcon) selIcon.classList.remove('sel'); selIcon = el; el.classList.add('sel'); });
+  bindOpen(el, d.open, e => { selIcon = el; pickOne(iconsEl, el, e); });
   iconsEl.append(el);
 });
-desk.addEventListener('pointerdown', e => {
-  if (e.target === desk || e.target === iconsEl){ if (selIcon){ selIcon.classList.remove('sel'); selIcon = null; } }
-});
+marquee(desk, '.dicon', t => t === desk || t === iconsEl, () => iconsEl);
 
 const startBtn = $('#start'), startMenu = $('#startmenu');
 startBtn.append(ico('logo', 16), h('span', { text:'Start' }));
