@@ -1,4 +1,4 @@
-# zachofalltrade.com: ZachOS 95
+# zachofalltrade.com: ZachOS 13.0
 
 A single-file retro desktop portfolio. No build step, no dependencies. Open `index.html` in a browser, or host the folder anywhere that serves static files.
 

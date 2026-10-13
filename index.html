@@ -626,7 +626,7 @@ function openNotepad(name, text){
   let win;
   const mb = menubar([
     { label:'File', items:[ { label:'Exit', run: () => closeWin(win) } ] },
-    { label:'Help', items:[ { label:'About Notepad', run: () => msgBox({ title:'About Notepad', icon:'info', text:'Notepad for ZachOS 95.\nIt does not save anything. Nothing here does.' }) } ] }
+    { label:'Help', items:[ { label:'About Notepad', run: () => msgBox({ title:'About Notepad', icon:'info', text:'Notepad for ZachOS 13.0.\nIt does not save anything. Nothing here does.' }) } ] }
   ]);
   win = createWindow({ title:(name || 'Untitled')+' - Notepad', icon:'text', w:480, h:340, menu:mb, content:ta });
   return win;
@@ -644,7 +644,7 @@ function openPdf(name, node){
   let win;
   const mb = menubar([
     { label:'File', items:[ { label:'Save As...', run:save }, { label:'Open in New Tab', run:newTab }, '-', { label:'Close', run:() => closeWin(win) } ] },
-    { label:'Help', items:[ { label:'About', run: () => msgBox({ title:'About', icon:'info', text:'Document Reader for ZachOS 95.' }) } ] }
+    { label:'Help', items:[ { label:'About', run: () => msgBox({ title:'About', icon:'info', text:'Document Reader for ZachOS 13.0.' }) } ] }
   ]);
   const tool = h('div', { class:'tool' }, h('button', { class:'b', on:{ click:save } }, 'Save to my computer'), h('button', { class:'b', on:{ click:newTab } }, 'Open in new tab'));
   const content = h('div', { style:'display:flex;flex-direction:column;flex:1;min-height:0' }, tool, viewer);
@@ -693,7 +693,7 @@ function openBrowser(start){
     stat.textContent = 'Done';
     page.append(h('div', { class:'wp home' },
       h('h1', { text:'Welcome to the Web' }),
-      h('p', { text:'This is a tiny browser built into ZachOS 95. Most sites refuse to be shown inside other pages, so it can only render a few places.' }),
+      h('p', { text:'This is a tiny browser built into ZachOS 13.0. Most sites refuse to be shown inside other pages, so it can only render a few places.' }),
       h('h2', { text:'Links' }),
       h('ul', {},
         h('li', {}, h('a', { href:'#', on:{ click: e => { e.preventDefault(); nav(GH); } } }, 'My GitHub profile (' + GHUSER + ')')),
@@ -761,7 +761,7 @@ function openBrowser(start){
     { label:'File', items:[ { label:'Open in New Tab', run: () => { const u = hist[pos]; if (/^https?:/.test(u)) openUrl(u, u); } }, '-', { label:'Close', run: () => closeWin(win) } ] },
     { label:'Go', items:[ { label:'Back', run: () => step(-1) }, { label:'Forward', run: () => step(1) }, { label:'Home Page', run: () => nav(HOME) } ] },
     { label:'Favorites', items:[ { label:GHUSER + ' on GitHub', run: () => nav(GH) } ] },
-    { label:'Help', items:[ { label:'About', run: () => msgBox({ title:'About Web Browser', icon:'info', text:'Web Browser for ZachOS 95.\nIt only knows how to show a few pages.' }) } ] }
+    { label:'Help', items:[ { label:'About', run: () => msgBox({ title:'About Web Browser', icon:'info', text:'Web Browser for ZachOS 13.0.\nIt only knows how to show a few pages.' }) } ] }
   ]);
   const content = h('div', { style:'display:flex;flex-direction:column;flex:1;min-height:0' },
     h('div', { class:'tool' }, bBack, bFwd, bRef, bHome),
@@ -884,7 +884,7 @@ function openExplorer(tree, path, key){
   const mb = menubar([
     { label:'File', items:[ { label:'Close', run: () => closeWin(win) } ] },
     { label:'Go', items:[ { label:'My Computer', run: () => { if (tree === 'computer') go([]); } }, { label:'Applications', run: () => { if (tree === 'computer') go(['Zach (C:)', 'Applications']); } }, { label:'My Documents', run: () => { if (tree === 'computer') go(['Zach (C:)', 'My Documents']); } } ] },
-    { label:'Help', items:[ { label:'About', run: () => msgBox({ title:'About', icon:'info', text:'Explorer for ZachOS 95.' }) } ] }
+    { label:'Help', items:[ { label:'About', run: () => msgBox({ title:'About', icon:'info', text:'Explorer for ZachOS 13.0.' }) } ] }
   ]);
   const content = h('div', { class:'body', style:'flex:1;display:flex;flex-direction:column;min-height:0' },
     h('div', { class:'tool' }, back, up, addr), list, status);
@@ -941,7 +941,7 @@ function openDos(){
   const print = t => { line.before(h('div', { text: t === '' ? '\u00A0' : t })); out.scrollTop = out.scrollHeight; };
   const lines = t => String(t).split('\n').forEach(print);
   const here = () => getNode('computer', cwd);
-  lines('ZachOS 95 [Version 4.00.95]\n(C) Copyright Zach of All Trade 1986-2026.\n\nType HELP for a list of commands.\n');
+  lines('ZachOS 13.0 [Version 4.00.95]\n(C) Copyright Zach of All Trade 1986-2026.\n\nType HELP for a list of commands.\n');
   out.append(line);
   const setPrompt = () => { pr.textContent = prompt(); };
   setPrompt();
@@ -985,7 +985,7 @@ function openDos(){
       print('Bad command or file name');
     },
     cls(){ [...out.children].forEach(c => { if (c !== line) c.remove(); }); },
-    ver(){ print('ZachOS 95 [Version 4.00.95]'); },
+    ver(){ print('ZachOS 13.0 [Version 4.00.95]'); },
     date(){ print('Current date is '+new Date().toLocaleDateString()); },
     time(){ print('Current time in Detroit is '+new Date().toLocaleTimeString([], { timeZone:'America/Detroit' })); },
     whoami(){ print('guest (but you are always welcome here)'); },
@@ -998,7 +998,7 @@ function openDos(){
       lines('\nPing statistics: Sent = 4, Received = 4, Lost = 0 (0% loss)');
     },
     exit(){ closeWin(win); },
-    sudo(){ print('Nice try. This is a 1995 operating system. There is no sudo, only vibes.'); },
+    sudo(){ print('Nice try. This is a retro operating system. There is no sudo, only vibes.'); },
     format(){ print('Formatting C: ... just kidding. Nothing was harmed.'); },
     del(){ print('Access denied. The files are load bearing.'); },
     win(){ print('ZachOS is already running.'); },
@@ -1107,7 +1107,7 @@ function openSystem(){
     h('div', { class:'sheet', style:'display:flex;gap:1rem;min-width:18.75rem' },
       ico('computer', 32),
       h('div', {},
-        h('h4', { text:'System:' }), h('p', { text:'ZachOS 95' }), h('p', { text:'4.00.95 (Build 1986)' }),
+        h('h4', { text:'System:' }), h('p', { text:'ZachOS 13.0' }), h('p', { text:'4.00.95 (Build 1986)' }),
         h('h4', { text:'Registered to:' }), h('p', { text:CONFIG.ownerName }), h('p', { text:'of All Trade' }),
         h('h4', { text:'Computer:' }), h('p', { text:'Genuine Human(R) Brain' }), h('p', { text:'Caffeine powered' }), h('p', { text:'640 KB RAM (ought to be enough)' }))),
     h('div', { class:'brow', style:'padding:0.25rem 0' }, h('button', { class:'b', on:{ click: () => closeWin(w) } }, 'OK')));
@@ -1278,7 +1278,7 @@ const desktopItems = [
   { name:'My Documents', icon:'folder', open: () => openExplorer('computer', DOCS_PATH, 'exp:docs') },
   ...(CONFIG.resumePdfUrl ? [{ name:'Resume.pdf', icon:'pdf', open: () => openPdf('Resume.pdf', { url:CONFIG.resumePdfUrl, file:CONFIG.resumeFileName }) }] : []),
   { name:'README.txt', icon:'text', open: () => openNotepad('README.txt',
-`Welcome to ZachOS 95.
+`Welcome to ZachOS 13.0.
 
 This is the portfolio of Zach of All Trade.
 
@@ -1339,7 +1339,7 @@ const menuItems = [
   '-',
   { label:'Shut Down...', icon:'computer', run: shutdownDialog }
 ];
-startMenu.append(h('div', { class:'sbanner' }, 'ZachOS 95'), buildMenu(menuItems, true));
+startMenu.append(h('div', { class:'sbanner' }, 'ZachOS 13.0'), buildMenu(menuItems, true));
 function fitSub(li){
   const ul = li.querySelector(':scope>.sm'); if (!ul || innerWidth <= 640) return;
   ul.style.top = ''; ul.style.maxHeight = ''; ul.style.overflowY = ''; ul.classList.remove('left');
@@ -1421,7 +1421,7 @@ const DCOS = {
   resume:   { f:['c_resume'], quip:"Glasses on and looking professional. Take your time with the resume." },
   explorer: { f:['c_explorer'], quip:"Off exploring the folders. Who knows what's in there." },
   dos:      { f:['c_dos'], quip:"I'm in. Type help to see what this thing can do." },
-  browser:  { f:['c_browser'], quip:"Shades on. Surfing the web, 1995 style." },
+  browser:  { f:['c_browser'], quip:"Shades on. Surfing the web, retro style." },
   notepad:  { f:['c_notepad'], quip:"Taking notes. Nothing gets saved, but it's the thought that counts." }
 };
 function diskyCostumeFor(w){
@@ -1473,7 +1473,7 @@ function ensureDisky(){
   const hideDisky = () => { closePanel(); el.classList.add('hide'); mark('zoat_dhide'); };
   const icon = n => () => [...document.querySelectorAll('.dicon')].find(d => d.textContent.trim() === n);
   const TOUR = [
-    { t:"Welcome to ZachOS 95! This is Zach's portfolio, built to look like a computer from 1995. I'll show you around. It takes about a minute." },
+    { t:"Welcome to ZachOS 13.0! This is Zach's portfolio, built to look like a retro computer. I'll show you around. It takes about a minute." },
     { t:'Double-click an icon to open it. On a phone or tablet, a single tap works.', hl:'.dicon' },
     { t:'The Applications folder holds the things Zach built. Open an app folder, then its .exe, and the app launches in a new tab.', hl:icon('Applications'), act:['Open Applications folder', () => desktopItems[1].open()] },
     { t:"Resume.pdf is Zach's resume. It opens in a reader window, and you can save a copy to your own computer.", hl:icon('Resume.pdf'), act:['Open Resume', () => openPdf('Resume.pdf', { url:CONFIG.resumePdfUrl, file:CONFIG.resumeFileName })] },
@@ -1500,7 +1500,7 @@ function ensureDisky(){
       btn("What's on this computer?", () => go('menu')),
       btn('Not now', closePanel),
       btn("Don't show popups again", () => { mark('zoat_nodisky'); closePanel(); })]),
-    menu: () => view("This is ZachOS 95, Zach's portfolio. What would you like to know about?", null, [
+    menu: () => view("This is ZachOS 13.0, Zach's portfolio. What would you like to know about?", null, [
       btn('Applications', () => go('apps')), btn('Resume', () => go('resume')), btn('Documents', () => go('docs')),
       btn('Web Browser', () => go('browser')), btn('Games', () => go('games')), btn('LinkedIn', () => go('linkedin')),
       btn('Show me around', () => tour(0)), btn('Close', closePanel), btn('Hide Disky', hideDisky)]),
@@ -1558,7 +1558,7 @@ document.addEventListener('keydown', e => {
 });
 function showBsod(){
   if ($('#bsod')) return;
-  const b = h('div', { id:'bsod' }, h('div', { style:'text-align:center;margin-bottom:1.5rem' }, h('b', { text:' ZachOS 95 ' })),
+  const b = h('div', { id:'bsod' }, h('div', { style:'text-align:center;margin-bottom:1.5rem' }, h('b', { text:' ZachOS 13.0 ' })),
 `A fatal exception 0E has occurred at 0028:C0011E36 in VXD VMM(01) + 00010E36. The current application will be terminated.
 
 Cause: Konami code detected. Honestly, this one is not your fault.
@@ -1617,7 +1617,7 @@ function boot(){
       'Detecting Primary Master ... Hard Drive of Many Hats',
       'Detecting Secondary Master ... CD-ROM', '',
       'Press any key to skip...', '',
-      'Starting ZachOS 95...'
+      'Starting ZachOS 13.0...'
     ];
     let done = false; const timers = [];
     const finish = () => {
@@ -1639,7 +1639,7 @@ function boot(){
           h('div', { class:'vlogo', html:svg('logo', 120) }),
           h('div', { class:'vtxt' },
             h('div', { class:'sm', text:'Zach of All Trade' }),
-            h('h1', { html:'ZachOS<span>95</span>' }))),
+            h('h1', { html:'ZachOS<span>13.0</span>' }))),
         stat, h('div', { class:'vbar' }, fill)));
       let p = 0;
       prog = setInterval(() => {
